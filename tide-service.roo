@@ -1,0 +1,214 @@
+
+
+// Initial project setup
+
+project --topLevelPackage nz.co.jsrsolutions.tideservice --projectName tide-service --packaging POM
+
+module create --moduleName core --topLevelPackage nz.co.jsrsolutions.tideservice.core
+
+jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+
+dependency add --groupId joda-time --artifactId joda-time --version 2.1
+dependency add --groupId org.springframework.data --artifactId spring-data-rest-webmvc --version 1.0.0.RC3
+
+//  Setup some enums
+
+enum type --class ~.reference.TidePredictionType
+enum constant --name HighWater
+enum constant --name LowWater
+
+// Setup our Audit 'mapped superclass'
+
+entity jpa --class ~.domain.DomainBase --mappedSuperclass
+
+
+// Setup our domain entities
+embeddable --class ~.domain.GeoLocation
+embeddable --class ~.domain.Address
+
+// Users
+entity jpa --class ~.domain.AbstractUser --abstract --extends ~.domain.DomainBase --identifierType java.lang.String --activeRecord false  --equals
+entity jpa --class ~.domain.Client --extends ~.domain.AbstractUser --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.Operator --extends ~.domain.AbstractUser --activeRecord false --equals --testAutomatically
+
+// Main domain entities
+entity jpa --class ~.domain.Area --extends ~.domain.DomainBase --sequenceName AREA_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.SubArea --extends ~.domain.DomainBase --sequenceName SUBAREA_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.Port --extends ~.domain.DomainBase --sequenceName PORT_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.TidePredictionDay --extends ~.domain.DomainBase --sequenceName PREDICTIONDAY_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.TidePrediction --extends ~.domain.DomainBase --sequenceName PREDICTION_SEQ --activeRecord false --equals --testAutomatically
+
+
+// Define fields for 'DomainBase' domain class
+
+focus --class ~.domain.DomainBase
+field reference --fieldName createdBy --type ~.domain.AbstractUser
+field other --fieldName createdDate --type org.joda.time.DateTime
+field reference --fieldName lastModifiedBy --type ~.domain.AbstractUser
+field other --fieldName lastModifiedDate --type org.joda.time.DateTime
+field boolean --fieldName isActive --value true
+
+
+// Define fields for a 'GeoLocation' domain class
+
+focus --class ~.domain.GeoLocation
+field number --fieldName latitude --type int --notNull
+field number --fieldName longitude --type int --notNull
+
+
+// Define fields for an 'Address' domain class
+
+focus --class ~.domain.Address
+field string --fieldName addressLine1 --notNull --sizeMax 50 --sizeMin 1
+field string --fieldName addressLine2 --sizeMax 50 --sizeMin 1
+field string --fieldName city --notNull --sizeMax 30
+field string --fieldName postalCode --notNull --sizeMax 30
+field string --fieldName country --notNull --sizeMax 30
+
+// Define fields for an 'AbstractUser' domain class
+
+focus --class ~.domain.AbstractUser
+field string --fieldName userName --notNull  --sizeMin 1 --sizeMax 80
+field string --fieldName firstName --notNull --sizeMin 1 --sizeMax 100
+field string --fieldName lastName --notNull --sizeMin 1 --sizeMax 100
+
+
+// Define fields for a 'Client' domain class
+
+focus --class ~.domain.Client
+//field reference --fieldName organisation --type ~.domain.Organisation --notNull --cardinality MANY_TO_ONE
+//field embedded --fieldName contactDetails --type ~.domain.ContactDetails
+
+
+// Define fields for a 'Operator' domain class
+
+focus --class ~.domain.Operator
+//field reference --fieldName organisation --type ~.domain.Organisation --notNull
+
+
+// Define fields for a 'Area' domain class
+
+focus --class ~.domain.Area
+field string --fieldName name --sizeMax 60
+field string --fieldName description --sizeMax 255
+field set --fieldName subArea --type ~.domain.SubArea --mappedBy area --cardinality ONE_TO_MANY
+
+
+// Define fields for a 'SubArea' domain class
+
+focus --class ~.domain.SubArea
+field string --fieldName name --sizeMax 60
+field string --fieldName description --sizeMax 255
+field set --fieldName ports --type ~.domain.Port --mappedBy subArea --cardinality ONE_TO_MANY
+field reference --fieldName area --type ~.domain.Area --notNull --cardinality MANY_TO_ONE
+
+// Define fields for a 'Port' domain class
+
+focus --class ~.domain.Port
+field string --fieldName name --sizeMax 60
+field string --fieldName description --sizeMax 255
+field embedded --fieldName geoLocation --type ~.domain.GeoLocation
+field reference --fieldName subArea --type ~.domain.SubArea --notNull --cardinality MANY_TO_ONE
+
+// Define fields for a 'TidePredictionDay' domain class
+
+focus --class ~.domain.TidePredictionDay
+field date --fieldName localDate --type org.joda.time.LocalDate --notNull
+field set --fieldName tidePredictions --type ~.domain.TidePrediction --cardinality ONE_TO_MANY
+field reference --fieldName port --type ~.domain.Port --notNull --cardinality MANY_TO_ONE
+
+// Define fields for a 'TidePrediction' domain class
+
+focus --class ~.domain.TidePrediction
+field enum --fieldName tidePredictionType --type ~.reference.TidePredictionType --notNull
+field date --fieldName utcTime --type org.joda.time.DateTime --notNull
+field number --fieldName height --type java.lang.Float
+field reference --fieldName tidePredictionDay --type ~.domain.TidePredictionDay --notNull --cardinality MANY_TO_ONE
+
+
+// Define finders
+
+//finder add --finderName findVisitsByDescriptionAndVisitDate --class ~.domain.Visit
+//finder add --finderName findVisitsByVisitDateBetween
+//finder add --finderName findVisitsByDescriptionLike
+
+
+
+// Define a repository layer for persistence
+repository jpa --interface ~.repository.OperatorRepository --entity ~.domain.Operator
+repository jpa --interface ~.repository.ClientRepository --entity ~.domain.Client
+repository jpa --interface ~.repository.AreaRepository --entity ~.domain.Area
+repository jpa --interface ~.repository.SubAreaRepository --entity ~.domain.SubArea
+repository jpa --interface ~.repository.PortRepository --entity ~.domain.Port
+repository jpa --interface ~.repository.TidePredictionDayRepository --entity ~.domain.TidePredictionDay
+repository jpa --interface ~.repository.TidePredictionRepository --entity ~.domain.TidePrediction
+
+// Enable JSON serialization support for all entities
+
+json all --deepSerialize
+
+// Define services
+
+service --interface ~.service.OperatorService --entity ~.domain.Operator
+service --interface ~.service.ClientService --entity ~.domain.Client
+service --interface ~.service.AreaService --entity ~.domain.Area
+service --interface ~.service.SubAreaService --entity ~.domain.SubArea
+service --interface ~.service.PortService --entity ~.domain.Port
+service --interface ~.service.TidePredictionDayService --entity ~.domain.TidePredictionDay
+service --interface ~.service.TidePredictionService --entity ~.domain.TidePrediction
+
+// Integration tests
+
+//test integration --entity ~.domain.GeoLocation
+//test integration --entity ~.domain.Address
+//test integration --entity ~.domain.ContactDetails
+test integration --entity ~.domain.Operator
+test integration --entity ~.domain.Client
+test integration --entity ~.domain.Area
+test integration --entity ~.domain.SubArea
+test integration --entity ~.domain.Port
+test integration --entity ~.domain.TidePredictionDay
+test integration --entity ~.domain.TidePrediction
+
+
+// Setup web MVC
+
+module focus --moduleName ~
+module create --moduleName rest --topLevelPackage nz.co.jsrsolutions.tideservice.rest
+
+web mvc json setup
+web mvc json all --package ~
+
+//web mvc setup
+//web mvc all --package ~
+
+//web mvc finder all
+//web mvc language --code en
+//web mvc language --code de
+//web mvc language --code es
+
+
+security setup
+
+// UI tests
+
+//selenium test --controller ~.web.PremisesController
+//selenium test --controller ~.web.OrganisationController
+//selenium test --controller ~.web.ClientController
+//selenium test --controller ~.web.ShopperController
+//selenium test --controller ~.web.OperatorController
+//selenium test --controller ~.web.VisitController
+
+module focus --moduleName ~
+module create --moduleName scraper --topLevelPackage nz.co.jsrsolutions.tideservice.scraper
+
+
+module focus --moduleName rest
+logging setup --level DEBUG
+
+module focus --moduleName scraper
+logging setup --level DEBUG
+
+module focus --moduleName core
+logging setup --level DEBUG
+

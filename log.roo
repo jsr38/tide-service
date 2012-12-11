@@ -1,0 +1,94 @@
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-12-11 15:00:17
+project --topLevelPackage nz.co.jsrsolutions.tideservice --projectName tide-service --packaging POM
+module create --moduleName core --topLevelPackage nz.co.jsrsolutions.tideservice.core
+jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+dependency add --groupId joda-time --artifactId joda-time --version 2.1
+dependency add --groupId org.springframework.data --artifactId spring-data-rest-webmvc --version 1.0.0.RC3
+enum type --class ~.reference.TidePredictionType
+enum constant --name HighWater
+enum constant --name LowWater
+entity jpa --class ~.domain.DomainBase --mappedSuperclass
+embeddable --class ~.domain.GeoLocation
+embeddable --class ~.domain.Address
+entity jpa --class ~.domain.AbstractUser --abstract --extends ~.domain.DomainBase --identifierType java.lang.String --activeRecord false  --equals
+entity jpa --class ~.domain.Client --extends ~.domain.AbstractUser --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.Operator --extends ~.domain.AbstractUser --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.Area --extends ~.domain.DomainBase --sequenceName AREA_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.SubArea --extends ~.domain.DomainBase --sequenceName SUBAREA_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.Port --extends ~.domain.DomainBase --sequenceName PORT_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.TidePredictionDay --extends ~.domain.DomainBase --sequenceName PREDICTIONDAY_SEQ --activeRecord false --equals --testAutomatically
+entity jpa --class ~.domain.TidePrediction --extends ~.domain.DomainBase --sequenceName PREDICTION_SEQ --activeRecord false --equals --testAutomatically
+focus --class ~.domain.DomainBase
+field reference --fieldName createdBy --type ~.domain.AbstractUser
+field other --fieldName createdDate --type org.joda.time.DateTime
+field reference --fieldName lastModifiedBy --type ~.domain.AbstractUser
+field other --fieldName lastModifiedDate --type org.joda.time.DateTime
+field boolean --fieldName isActive --value true
+focus --class ~.domain.GeoLocation
+field number --fieldName latitude --type int --notNull
+field number --fieldName longitude --type int --notNull
+focus --class ~.domain.Address
+field string --fieldName addressLine1 --notNull --sizeMax 50 --sizeMin 1
+field string --fieldName addressLine2 --sizeMax 50 --sizeMin 1
+field string --fieldName city --notNull --sizeMax 30
+field string --fieldName postalCode --notNull --sizeMax 30
+field string --fieldName country --notNull --sizeMax 30
+focus --class ~.domain.AbstractUser
+field string --fieldName userName --notNull  --sizeMin 1 --sizeMax 80
+field string --fieldName firstName --notNull --sizeMin 1 --sizeMax 100
+field string --fieldName lastName --notNull --sizeMin 1 --sizeMax 100
+focus --class ~.domain.Client
+focus --class ~.domain.Operator
+focus --class ~.domain.Area
+field string --fieldName name --sizeMax 60
+field string --fieldName description --sizeMax 255
+field set --fieldName subArea --type ~.domain.SubArea --mappedBy area --cardinality ONE_TO_MANY
+focus --class ~.domain.SubArea
+field string --fieldName name --sizeMax 60
+field string --fieldName description --sizeMax 255
+field set --fieldName ports --type ~.domain.Port --mappedBy subArea --cardinality ONE_TO_MANY
+field reference --fieldName area --type ~.domain.Area --notNull --cardinality MANY_TO_ONE
+focus --class ~.domain.Port
+field string --fieldName name --sizeMax 60
+field string --fieldName description --sizeMax 255
+field embedded --fieldName geoLocation --type ~.domain.GeoLocation
+field reference --fieldName subArea --type ~.domain.SubArea --notNull --cardinality MANY_TO_ONE
+focus --class ~.domain.TidePredictionDay
+field date --fieldName localDate --type org.joda.time.LocalDate --notNull
+field set --fieldName tidePredictions --type ~.domain.TidePrediction --cardinality ONE_TO_MANY
+field reference --fieldName port --type ~.domain.Port --notNull --cardinality MANY_TO_ONE
+focus --class ~.domain.TidePrediction
+field enum --fieldName tidePredictionType --type ~.reference.TidePredictionType --notNull
+field date --fieldName utcTime --type org.joda.time.DateTime --notNull
+field number --fieldName height --type java.lang.Float
+field reference --fieldName tidePredictionDay --type ~.domain.TidePredictionDay --notNull --cardinality MANY_TO_ONE
+repository jpa --interface ~.repository.OperatorRepository --entity ~.domain.Operator
+repository jpa --interface ~.repository.ClientRepository --entity ~.domain.Client
+repository jpa --interface ~.repository.AreaRepository --entity ~.domain.Area
+repository jpa --interface ~.repository.SubAreaRepository --entity ~.domain.SubArea
+repository jpa --interface ~.repository.PortRepository --entity ~.domain.Port
+repository jpa --interface ~.repository.TidePredictionDayRepository --entity ~.domain.TidePredictionDay
+repository jpa --interface ~.repository.TidePredictionRepository --entity ~.domain.TidePrediction
+json all --deepSerialize
+service --interface ~.service.OperatorService --entity ~.domain.Operator
+service --interface ~.service.ClientService --entity ~.domain.Client
+service --interface ~.service.AreaService --entity ~.domain.Area
+service --interface ~.service.SubAreaService --entity ~.domain.SubArea
+service --interface ~.service.PortService --entity ~.domain.Port
+service --interface ~.service.TidePredictionDayService --entity ~.domain.TidePredictionDay
+service --interface ~.service.TidePredictionService --entity ~.domain.TidePrediction
+test integration --entity ~.domain.Operator
+test integration --entity ~.domain.Client
+test integration --entity ~.domain.Area
+test integration --entity ~.domain.SubArea
+test integration --entity ~.domain.Port
+test integration --entity ~.domain.TidePredictionDay
+test integration --entity ~.domain.TidePrediction
+module focus --moduleName ~
+module create --moduleName rest --topLevelPackage nz.co.jsrsolutions.tideservice.rest
+web mvc json setup
+web mvc json all --package ~
+// [failed] security setup
+// [failed] script --file tide-service.roo
+quit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2012-12-11 15:01:15

@@ -14,7 +14,7 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.ds3;
+package nz.co.jsrsolutions.tideservice.scraper;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -26,9 +26,9 @@ import org.quartz.Scheduler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
-final class DataScraper3 {
+final class TideScraper {
 
-  private static final transient Logger logger = Logger.getLogger(DataScraper3.class);
+  private static final transient Logger logger = Logger.getLogger(TideScraper.class);
 
   private static final String SPRING_CONFIG_PREFIX = new String("service.");
 
@@ -38,7 +38,7 @@ final class DataScraper3 {
 
   private static final String CONTROLLER_BEAN_ID = new String("controller");
 
-  private DataScraper3() {
+  private TideScraper() {
 
   }
 
@@ -76,8 +76,8 @@ final class DataScraper3 {
 
         }
         else {
-          DataScraper3Controller controller = context.getBean(CONTROLLER_BEAN_ID,
-              DataScraper3Controller.class);
+          TideScraperController controller = context.getBean(CONTROLLER_BEAN_ID,
+              TideScraperController.class);
           controller.executeCommandLine(commandLine);
         }
         
@@ -91,7 +91,7 @@ final class DataScraper3 {
 
 
     }
-    catch (DataScraper3Exception ds3e) {
+    catch (TideScraperException ds3e) {
       logger.error("Failed to execute command", ds3e); 
     }
     catch(ParseException pe) {

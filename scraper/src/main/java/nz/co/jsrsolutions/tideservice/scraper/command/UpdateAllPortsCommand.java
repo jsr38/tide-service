@@ -1,7 +1,7 @@
 /* -*- mode: java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 
 /*
- * @(#)UpdateExchangesCommand.java        
+ * @(#)UpdateAllSymbolsCommand.java        
  *
  * Copyright (c) 2012 JSR Solutions Limited
  * 4 Viridian Lane, Auckland, 0632.  New Zealand
@@ -14,31 +14,25 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.ds3.command;
+package nz.co.jsrsolutions.tideservice.scraper.command;
 
-import nz.co.jsrsolutions.ds3.sink.EodDataSink;
-import nz.co.jsrsolutions.ds3.DataStub.EXCHANGE;
-import nz.co.jsrsolutions.ds3.provider.EodDataProvider;
 
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
 import org.apache.log4j.Logger;
 
-class UpdateExchangesCommand implements Command {
+public class UpdateAllPortsCommand implements Command {
 
-  private static final transient Logger logger = Logger.getLogger(UpdateExchangesCommand.class);
+  private static final transient Logger logger = Logger.getLogger(UpdateAllPortsCommand.class);
 
   public boolean execute(Context context) throws Exception {
 
-    logger.info("Executing: updateexchanges");
+    logger.info("Executing: updateallports");
 
-    EodDataProvider eodDataProvider = (EodDataProvider)context.get(CommandContext.EODDATAPROVIDER_KEY);
-    EodDataSink eodDataSink = (EodDataSink)context.get(CommandContext.EODDATASINK_KEY);
 
-    EXCHANGE[] exchanges = eodDataProvider.getExchanges();
-    eodDataSink.updateExchanges(exchanges);
 
     return false;
 
   }
 }
+

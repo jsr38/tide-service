@@ -14,7 +14,7 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.ds3.command;
+package nz.co.jsrsolutions.tideservice.scraper.command;
 
 import java.util.concurrent.ExecutorService;
 
@@ -22,66 +22,18 @@ import org.apache.commons.chain.Command;
 
 public final class CommandFactory {
 
-  private static final String LISTEXCHANGES_KEY = new String("listexchanges");
+  private static final String UPDATEALLPORTS_KEY = new String(
+      "updateallsymbols");
 
-  private static final String LISTEXCHANGEMONTHS_KEY = new String("listexchangemonths");
+  public static Command create(String type, ExecutorService executorService)
+      throws CommandException {
 
-  private static final String UPDATEEXCHANGES_KEY = new String("updateexchanges");
+    if (type.compareTo(UPDATEALLPORTS_KEY) == 0) {
 
-  private static final String UPDATEEXCHANGESYMBOLS_KEY = new String("updateexchangesymbols");
+      return new UpdateAllPortsCommand();
 
-  private static final String UPDATEALLSYMBOLS_KEY = new String("updateallsymbols");
+    } else {
 
-  private static final String UPDATEEXCHANGEQUOTES_KEY = new String("updateexchangequotes");
-
-  private static final String GETEXCHANGESYMBOLQUOTES_KEY = new String("getexchangesymbolquotes");
-  
-  private static final String UPDATEEXCHANGESYMBOLQUOTES_KEY = new String("updateexchangesymbolquotes");
-
-  public static Command create(String type, ExecutorService executorService) throws CommandException {
-    
-    if (type.compareTo(LISTEXCHANGES_KEY) == 0) {
-      
-      return new ListExchangesCommand();
-
-    }
-    else if (type.compareTo(LISTEXCHANGEMONTHS_KEY) == 0) {
-      
-      return new ListExchangeMonthsCommand();
-
-    }
-    else if (type.compareTo(UPDATEEXCHANGES_KEY) == 0) {
-      
-      return new UpdateExchangesCommand();
-
-    }
-    else if (type.compareTo(UPDATEEXCHANGESYMBOLS_KEY) == 0) {
-      
-      return new UpdateExchangeSymbolsCommand();
-
-    }
-    else if (type.compareTo(UPDATEALLSYMBOLS_KEY) == 0) {
-      
-      return new UpdateAllSymbolsCommand();
-
-    }
-    else if (type.compareTo(UPDATEEXCHANGEQUOTES_KEY) == 0) {
-      
-      return new UpdateExchangeQuotesCommand(executorService);
-
-    }
-    else if (type.compareTo(UPDATEEXCHANGESYMBOLQUOTES_KEY) == 0) {
-      
-      return new UpdateExchangeSymbolQuotesCommand();
-
-    }
-    else if (type.compareTo(GETEXCHANGESYMBOLQUOTES_KEY) == 0) {
-      
-      return new GetExchangeSymbolQuotesCommand();
-
-    }
-    else {
-      
       StringBuffer stringBuffer = new StringBuffer();
       stringBuffer.append("Unknown command [ ");
       stringBuffer.append(type);

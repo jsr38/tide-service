@@ -103,3 +103,7 @@ module focus --moduleName core
 logging setup --level DEBUG
 focus --class ~.domain.Port
 field string --fieldName externalId --unique --notNull
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-12-12 07:24:52
+module focus --moduleName scraper
+quit
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2012-12-12 07:28:48

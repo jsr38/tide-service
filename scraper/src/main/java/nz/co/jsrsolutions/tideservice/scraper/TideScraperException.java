@@ -14,12 +14,12 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.ds3;
+package nz.co.jsrsolutions.tideservice.scraper;
 
 
 import java.lang.String;
 
-class DataScraper3Exception extends Exception {
+class TideScraperException extends Exception {
   /**
    * 
    */
@@ -27,17 +27,17 @@ class DataScraper3Exception extends Exception {
   
   private String mistake;
 
-  public DataScraper3Exception() {
+  public TideScraperException() {
     super();
     mistake = "unknown";
   }
 
-  public DataScraper3Exception(String err) {
+  public TideScraperException(String err) {
     super(err);
     mistake = err;
   }
   
-  public DataScraper3Exception(Throwable cause) {
+  public TideScraperException(Throwable cause) {
     super(cause);
   }  
 

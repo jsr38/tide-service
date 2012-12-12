@@ -14,14 +14,11 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.ds3;
+package nz.co.jsrsolutions.tideservice.scraper;
 
 import java.util.concurrent.ExecutorService;
 
-import nz.co.jsrsolutions.ds3.command.CommandContext;
-import nz.co.jsrsolutions.ds3.command.CommandFactory;
-import nz.co.jsrsolutions.ds3.provider.EodDataProvider;
-import nz.co.jsrsolutions.ds3.sink.EodDataSink;
+import nz.co.jsrsolutions.tideservice.scraper.command.CommandContext;
 import nz.co.jsrsolutions.util.EmailService;
 
 import org.apache.commons.chain.Command;
@@ -35,15 +32,15 @@ import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 @ManagedResource(objectName = "bean:name=controller", description = "ds3 controller MBean", log = true, logFile = "jmx.log", currencyTimeLimit = 15, persistPolicy = "OnUpdate", persistPeriod = 200, persistLocation = "foo", persistName = "bar")
-final public class DataScraper3Controller implements ApplicationContextAware {
+final public class TideScraperController implements ApplicationContextAware {
 
   @SuppressWarnings("unused")
   private static final transient Logger logger = Logger
-      .getLogger(DataScraper3Controller.class);
+      .getLogger(TideScraperController.class);
   
-  private EodDataProvider _eodDataProvider;
-
-  private EodDataSink _eodDataSink;
+//  private EodDataProvider _eodDataProvider;
+//
+//  private EodDataSink _eodDataSink;
 
   private EmailService _emailService;
 
@@ -51,25 +48,25 @@ final public class DataScraper3Controller implements ApplicationContextAware {
 
   private ExecutorService _executorService;
   
-  public DataScraper3Controller(EodDataProvider eodDataProvider,
-      EodDataSink eodDataSink, EmailService emailService, ExecutorService executorService) {
+  public TideScraperController(/* EodDataProvider eodDataProvider,
+      EodDataSink eodDataSink,*/ EmailService emailService, ExecutorService executorService) {
 
-    _eodDataProvider = eodDataProvider;
-    _eodDataSink = eodDataSink;
+//    _eodDataProvider = eodDataProvider;
+//    _eodDataSink = eodDataSink;
     _emailService = emailService;
     _executorService = executorService;
   }
 
   public void executeCommandLine(CommandLine commandLine)
-      throws DataScraper3Exception {
+      throws TideScraperException {
 
     if (!commandLine.hasOption(CommandLineOptions.COMMAND)) {
-      throw new DataScraper3Exception("No command supplied.");
+      throw new TideScraperException("No command supplied.");
     }
 
     CommandContext context = new CommandContext();
-    context.put(CommandContext.EODDATAPROVIDER_KEY, _eodDataProvider);
-    context.put(CommandContext.EODDATASINK_KEY, _eodDataSink);
+//    context.put(CommandContext.EODDATAPROVIDER_KEY, _eodDataProvider);
+//    context.put(CommandContext.EODDATASINK_KEY, _eodDataSink);
     context.put(CommandContext.EMAILSERVICE_KEY, _emailService);
 
     // place optional argument values into the context
@@ -90,7 +87,7 @@ final public class DataScraper3Controller implements ApplicationContextAware {
 
       command.execute(context);
     } catch (Exception e) {
-      throw new DataScraper3Exception(e);
+      throw new TideScraperException(e);
     }
 
   }

@@ -15,10 +15,8 @@
  */
 
 
-package nz.co.jsrsolutions.ds3.command;
+package nz.co.jsrsolutions.tideservice.scraper.command;
 
-import nz.co.jsrsolutions.ds3.sink.EodDataSink;
-import nz.co.jsrsolutions.ds3.provider.EodDataProvider;
 import nz.co.jsrsolutions.util.EmailService;
 
 import org.apache.commons.chain.impl.ContextBase;
@@ -41,27 +39,27 @@ public class CommandContext extends ContextBase {
 
   public static final String SYMBOL_KEY = new String("symbol");
 
-  private EodDataProvider eodDataProvider;
-
-  private EodDataSink eodDataSink;
+//  private EodDataProvider eodDataProvider;
+//
+//  private EodDataSink eodDataSink;
 
   private EmailService emailService;
 
-  public EodDataProvider getEodDataProvider() {
-    return eodDataProvider;
-  }
-
-  public void setEodDataProvider(EodDataProvider eodDataProvider) {
-    this.eodDataProvider = eodDataProvider;
-  }
-
-  public EodDataSink getEodDataSink() {
-    return eodDataSink;
-  }
-
-  public void setEodDataSink(EodDataSink eodDataSink) {
-    this.eodDataSink = eodDataSink;
-  }
+//  public EodDataProvider getEodDataProvider() {
+//    return eodDataProvider;
+//  }
+//
+//  public void setEodDataProvider(EodDataProvider eodDataProvider) {
+//    this.eodDataProvider = eodDataProvider;
+//  }
+//
+//  public EodDataSink getEodDataSink() {
+//    return eodDataSink;
+//  }
+//
+//  public void setEodDataSink(EodDataSink eodDataSink) {
+//    this.eodDataSink = eodDataSink;
+//  }
 
   public EmailService getEmailService() {
     return emailService;

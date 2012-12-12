@@ -1,7 +1,7 @@
 /* -*- mode: java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 
 /*
- * @(#)CommandException.java        
+ * @(#)ServiceException.java        
  *
  * Copyright (c) 2012 JSR Solutions Limited
  * 4 Viridian Lane, Auckland, 0632.  New Zealand
@@ -14,36 +14,35 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.tideservice.scraper.command;
+package nz.co.jsrsolutions.util;
 
 
 import java.lang.String;
 
-class CommandException extends Exception {
-
+class ServiceException extends Exception {
   /**
    * 
    */
-  private static final long serialVersionUID = -3835579233998111828L;
+  private static final long serialVersionUID = 8938865020947322939L;
+  
+  private String error;
 
-  private String mistake;
-
-  public CommandException() {
+  public ServiceException() {
     super();
-    mistake = "unknown";
+    error = "unknown";
   }
-  
-  public CommandException(String err) {
+
+  public ServiceException(String err) {
     super(err);
-    mistake = err;
+    error = err;
   }
   
-  public CommandException(Throwable cause) {
+  public ServiceException(Throwable cause) {
     super(cause);
   }  
-  
+
   public String getError() {
-    return mistake;
+    return error;
   }
 }
   

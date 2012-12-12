@@ -14,12 +14,10 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.ds3.command;
+package nz.co.jsrsolutions.tideservice.scraper.command;
 
 import java.util.concurrent.ExecutorService;
 
-import nz.co.jsrsolutions.ds3.sink.EodDataSink;
-import nz.co.jsrsolutions.ds3.provider.EodDataProvider;
 import nz.co.jsrsolutions.util.EmailService;
 
 import org.apache.commons.chain.Command;
@@ -31,11 +29,11 @@ public class QuartzJobBeanCommandProxy extends QuartzJobBean {
 
   private String command;
   
-  private String exchange;
+  //private String exchange;
   
-  private EodDataSink eodDataSink;
+  //private EodDataSink eodDataSink;
   
-  private EodDataProvider eodDataProvider;
+  //private EodDataProvider eodDataProvider;
   
   private EmailService emailService;
   
@@ -49,21 +47,21 @@ public class QuartzJobBeanCommandProxy extends QuartzJobBean {
     this.emailService = emailService;
   }
 
-  public void setEodDataSink(EodDataSink eodDataSink) {
-    this.eodDataSink = eodDataSink;
-  }
-
-  public void setEodDataProvider(EodDataProvider eodDataProvider) {
-    this.eodDataProvider = eodDataProvider;
-  }
+//  public void setEodDataSink(EodDataSink eodDataSink) {
+//    this.eodDataSink = eodDataSink;
+//  }
+//
+//  public void setEodDataProvider(EodDataProvider eodDataProvider) {
+//    this.eodDataProvider = eodDataProvider;
+//  }
 
   public void setCommand(String command) {
     this.command = command;
   }
   
-  public void setExchange(String exchange) {
-    this.exchange = exchange;
-  }
+//  public void setExchange(String exchange) {
+//    this.exchange = exchange;
+//  }
 
   protected void executeInternal(JobExecutionContext ctx)
       throws JobExecutionException {
@@ -73,11 +71,11 @@ public class QuartzJobBeanCommandProxy extends QuartzJobBean {
     }
 
     CommandContext context = new CommandContext();
-    context.put(CommandContext.EODDATAPROVIDER_KEY, eodDataProvider);
-    context.put(CommandContext.EODDATASINK_KEY, eodDataSink);
+    //context.put(CommandContext.EODDATAPROVIDER_KEY, eodDataProvider);
+    //context.put(CommandContext.EODDATASINK_KEY, eodDataSink);
     context.put(CommandContext.EMAILSERVICE_KEY, emailService);
 
-    context.put(CommandContext.EXCHANGE_KEY, exchange);
+    //context.put(CommandContext.EXCHANGE_KEY, exchange);
 
     try {
       Command cmd = CommandFactory.create(command, _executorService);

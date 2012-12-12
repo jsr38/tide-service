@@ -29,6 +29,9 @@ public class QuartzJobBeanCommandProxy extends QuartzJobBean {
 
   private String command;
   
+  
+  // TODO:  Modify all of this to retrieve command beans from the spring context
+  
   //private String exchange;
   
   //private EodDataSink eodDataSink;

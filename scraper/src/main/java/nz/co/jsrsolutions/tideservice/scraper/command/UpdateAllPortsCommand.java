@@ -17,6 +17,8 @@
 package nz.co.jsrsolutions.tideservice.scraper.command;
 
 
+import java.util.concurrent.ExecutorService;
+
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
 import org.apache.log4j.Logger;
@@ -25,6 +27,12 @@ public class UpdateAllPortsCommand implements Command {
 
   private static final transient Logger logger = Logger.getLogger(UpdateAllPortsCommand.class);
 
+  private final ExecutorService _executorService;
+
+  public UpdateAllPortsCommand(ExecutorService executorService) {
+    _executorService = executorService;
+  }
+  
   public boolean execute(Context context) throws Exception {
 
     logger.info("Executing: updateallports");

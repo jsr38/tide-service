@@ -23,16 +23,14 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 import org.quartz.Scheduler;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 
 final class TideScraper {
 
   private static final transient Logger logger = Logger.getLogger(TideScraper.class);
 
-  private static final String SPRING_CONFIG_PREFIX = new String("service.");
-
-  private static final String SPRING_CONFIG_SUFFIX = new String(".xml");
+  private static final String SPRING_CONFIG = new String("META-INF/spring/scraper-context-*.xml");
   
   private static final String SCHEDULER_BEAN_ID = new String("scheduler");
 
@@ -44,9 +42,9 @@ final class TideScraper {
 
   public static void main(String[] args) {
     
-    logger.info("Starting application [ ds3 ] ..."); 
+    logger.info("Starting application [ tide scraper ] ..."); 
 
-    ClassPathXmlApplicationContext context = null;
+    GenericXmlApplicationContext context = null;
 
     try {
 
@@ -56,12 +54,16 @@ final class TideScraper {
 
       if (commandLine.getOptions().length > 0 && !commandLine.hasOption(CommandLineOptions.HELP)) {
 
-        StringBuffer environment = new StringBuffer();
-        environment.append(SPRING_CONFIG_PREFIX);
-        environment.append(commandLine.getOptionValue(CommandLineOptions.ENVIRONMENT));
-        environment.append(SPRING_CONFIG_SUFFIX);
+        context = new GenericXmlApplicationContext();
+     
+        //ConfigurableEnvironment env = ctx.getEnvironment();
+        
+        //env.setActiveProfiles("test1");
+        
+        context.load(SPRING_CONFIG);
+        
+        context.refresh();
 
-        context = new ClassPathXmlApplicationContext(environment.toString());
         context.registerShutdownHook();
 
         if (commandLine.hasOption(CommandLineOptions.SCHEDULED)) {
@@ -85,14 +87,14 @@ final class TideScraper {
       else {
 
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("ds3", CommandLineOptions.Options);
+        formatter.printHelp("ts", CommandLineOptions.Options);
 
       }
 
 
     }
-    catch (TideScraperException ds3e) {
-      logger.error("Failed to execute command", ds3e); 
+    catch (TideScraperException tse) {
+      logger.error("Failed to execute command", tse); 
     }
     catch(ParseException pe) {
 
@@ -110,7 +112,7 @@ final class TideScraper {
       }
     }
 
-    logger.info("Exiting application [ ds3 ] ...");
+    logger.info("Exiting application [ tide scraper ] ...");
 
   }
 

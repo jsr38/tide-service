@@ -30,8 +30,6 @@ final class CommandLineOptions {
 
   public static final String HELP = new String("help");
 
-  public static final String ENVIRONMENT = new String("environment");
-
   public static final String COMMAND = new String("command");
 
   public static final String EXCHANGE = new String("exchange");
@@ -46,12 +44,6 @@ final class CommandLineOptions {
     
     OptionBuilder.withDescription("display help");
     Option help = OptionBuilder.create(HELP);
-
-    OptionBuilder.withArgName("env");
-    OptionBuilder.hasArg();
-    OptionBuilder.isRequired(true);
-    OptionBuilder.withDescription("specify environment {dev,qa,prod}");
-    Option environment = OptionBuilder.create(ENVIRONMENT);
 
     OptionBuilder.withArgName("command");
     OptionBuilder.hasArg();
@@ -77,14 +69,12 @@ final class CommandLineOptions {
 
     logger.debug("Registering command line options:");
     logger.debug(help.toString());
-    logger.debug(environment.toString());
     logger.debug(command.toString());
     logger.debug(exchange.toString());
     logger.debug(symbol.toString());
     logger.debug(scheduled.toString());
         
     Options.addOption(help);
-    Options.addOption(environment);
     Options.addOption(command);
     Options.addOption(exchange);
     Options.addOption(symbol);

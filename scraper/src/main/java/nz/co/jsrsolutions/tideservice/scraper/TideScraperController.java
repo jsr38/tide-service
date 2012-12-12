@@ -1,7 +1,7 @@
 /* -*- mode: java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 
 /*
- * @(#)DataScraper3Controller.java        
+ * @(#)TideDataScraperController.java        
  *
  * Copyright (c) 2012 JSR Solutions Limited
  * 4 Viridian Lane, Auckland, 0632.  New Zealand
@@ -31,7 +31,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
-@ManagedResource(objectName = "bean:name=controller", description = "ds3 controller MBean", log = true, logFile = "jmx.log", currencyTimeLimit = 15, persistPolicy = "OnUpdate", persistPeriod = 200, persistLocation = "foo", persistName = "bar")
+@ManagedResource(objectName = "bean:name=controller", description = "tide scraper controller MBean", log = true, logFile = "jmx.log", currencyTimeLimit = 15, persistPolicy = "OnUpdate", persistPeriod = 200, persistLocation = "foo", persistName = "bar")
 final public class TideScraperController implements ApplicationContextAware {
 
   @SuppressWarnings("unused")

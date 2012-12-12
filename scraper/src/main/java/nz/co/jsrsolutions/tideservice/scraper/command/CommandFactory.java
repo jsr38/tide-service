@@ -30,7 +30,7 @@ public final class CommandFactory {
 
     if (type.compareTo(UPDATEALLPORTS_KEY) == 0) {
 
-      return new UpdateAllPortsCommand();
+      return new UpdateAllPortsCommand(executorService);
 
     } else {
 

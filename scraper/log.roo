@@ -3,3 +3,7 @@ dependency add --groupId commons-cli --artifactId commons-cli --version 1.2
 dependency add --groupId org.quartz-scheduler --artifactId quartz --version 2.1.6
 dependency add --groupId commons-chain --artifactId commons-chain --version 1.2
 dependency add --groupId org.apache.commons --artifactId commons-email --version 1.2
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2012-12-12 09:57:25
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-12-12 10:12:02
+jpa setup --database HYPERSONIC_IN_MEMORY --provider HIBERNATE 
+dependency add --groupId tideservice --artifactId core --version 0.1.0.BUILD-SNAPSHOT

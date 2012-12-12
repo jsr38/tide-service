@@ -17,6 +17,7 @@
     <modules>
         <module>core</module>
     <module>rest</module>
+    <module>scraper</module>
     </modules>
     <repositories>
         <repository>

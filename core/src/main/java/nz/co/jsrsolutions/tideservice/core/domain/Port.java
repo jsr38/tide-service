@@ -1,5 +1,6 @@
 package nz.co.jsrsolutions.tideservice.core.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -29,4 +30,8 @@ public class Port extends DomainBase {
     @NotNull
     @ManyToOne
     private SubArea subArea;
+
+    @NotNull
+    @Column(unique = true)
+    private String externalId;
 }

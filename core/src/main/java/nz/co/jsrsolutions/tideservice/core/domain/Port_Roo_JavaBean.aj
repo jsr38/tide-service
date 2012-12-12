@@ -41,4 +41,12 @@ privileged aspect Port_Roo_JavaBean {
         this.subArea = subArea;
     }
     
+    public String Port.getExternalId() {
+        return this.externalId;
+    }
+    
+    public void Port.setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+    
 }

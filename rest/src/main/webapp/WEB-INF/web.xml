@@ -2,9 +2,9 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
     
-    <display-name>rest</display-name>
+    <display-name>Tide Service</display-name>
     
-    <description>Roo generated rest application</description>
+    <description>Tide Service Web Application</description>
 
     
     <context-param>

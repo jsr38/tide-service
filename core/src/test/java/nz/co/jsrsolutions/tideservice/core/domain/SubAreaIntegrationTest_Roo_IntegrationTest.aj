@@ -7,7 +7,7 @@ import java.util.List;
 import nz.co.jsrsolutions.tideservice.core.domain.SubAreaDataOnDemand;
 import nz.co.jsrsolutions.tideservice.core.domain.SubAreaIntegrationTest;
 import nz.co.jsrsolutions.tideservice.core.repository.SubAreaRepository;
-import nz.co.jsrsolutions.tideservice.core.service.SubAreaService;
+import nz.co.jsrsolutions.tideservice.core.service.AreaService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +28,7 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
     private SubAreaDataOnDemand SubAreaIntegrationTest.dod;
     
     @Autowired
-    SubAreaService SubAreaIntegrationTest.subAreaService;
+    AreaService SubAreaIntegrationTest.areaService;
     
     @Autowired
     SubAreaRepository SubAreaIntegrationTest.subAreaRepository;
@@ -36,7 +36,7 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
     @Test
     public void SubAreaIntegrationTest.testCountAllSubAreas() {
         Assert.assertNotNull("Data on demand for 'SubArea' failed to initialize correctly", dod.getRandomSubArea());
-        long count = subAreaService.countAllSubAreas();
+        long count = areaService.countAllSubAreas();
         Assert.assertTrue("Counter for 'SubArea' incorrectly reported there were no entries", count > 0);
     }
     
@@ -46,7 +46,7 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'SubArea' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'SubArea' failed to provide an identifier", id);
-        obj = subAreaService.findSubArea(id);
+        obj = areaService.findSubArea(id);
         Assert.assertNotNull("Find method for 'SubArea' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'SubArea' returned the incorrect identifier", id, obj.getId());
     }
@@ -54,9 +54,9 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
     @Test
     public void SubAreaIntegrationTest.testFindAllSubAreas() {
         Assert.assertNotNull("Data on demand for 'SubArea' failed to initialize correctly", dod.getRandomSubArea());
-        long count = subAreaService.countAllSubAreas();
+        long count = areaService.countAllSubAreas();
         Assert.assertTrue("Too expensive to perform a find all test for 'SubArea', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<SubArea> result = subAreaService.findAllSubAreas();
+        List<SubArea> result = areaService.findAllSubAreas();
         Assert.assertNotNull("Find all method for 'SubArea' illegally returned null", result);
         Assert.assertTrue("Find all method for 'SubArea' failed to return any data", result.size() > 0);
     }
@@ -64,11 +64,11 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
     @Test
     public void SubAreaIntegrationTest.testFindSubAreaEntries() {
         Assert.assertNotNull("Data on demand for 'SubArea' failed to initialize correctly", dod.getRandomSubArea());
-        long count = subAreaService.countAllSubAreas();
+        long count = areaService.countAllSubAreas();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<SubArea> result = subAreaService.findSubAreaEntries(firstResult, maxResults);
+        List<SubArea> result = areaService.findSubAreaEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'SubArea' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'SubArea' returned an incorrect number of entries", count, result.size());
     }
@@ -79,7 +79,7 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'SubArea' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'SubArea' failed to provide an identifier", id);
-        obj = subAreaService.findSubArea(id);
+        obj = areaService.findSubArea(id);
         Assert.assertNotNull("Find method for 'SubArea' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifySubArea(obj);
         Integer currentVersion = obj.getVersion();
@@ -93,10 +93,10 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'SubArea' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'SubArea' failed to provide an identifier", id);
-        obj = subAreaService.findSubArea(id);
+        obj = areaService.findSubArea(id);
         boolean modified =  dod.modifySubArea(obj);
         Integer currentVersion = obj.getVersion();
-        SubArea merged = (SubArea)subAreaService.updateSubArea(obj);
+        SubArea merged = (SubArea)areaService.updateSubArea(obj);
         subAreaRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'SubArea' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
@@ -108,7 +108,7 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
         SubArea obj = dod.getNewTransientSubArea(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'SubArea' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'SubArea' identifier to be null", obj.getId());
-        subAreaService.saveSubArea(obj);
+        areaService.saveSubArea(obj);
         subAreaRepository.flush();
         Assert.assertNotNull("Expected 'SubArea' identifier to no longer be null", obj.getId());
     }
@@ -119,10 +119,10 @@ privileged aspect SubAreaIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'SubArea' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'SubArea' failed to provide an identifier", id);
-        obj = subAreaService.findSubArea(id);
-        subAreaService.deleteSubArea(obj);
+        obj = areaService.findSubArea(id);
+        areaService.deleteSubArea(obj);
         subAreaRepository.flush();
-        Assert.assertNull("Failed to remove 'SubArea' with identifier '" + id + "'", subAreaService.findSubArea(id));
+        Assert.assertNull("Failed to remove 'SubArea' with identifier '" + id + "'", areaService.findSubArea(id));
     }
     
 }

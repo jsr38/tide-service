@@ -107,3 +107,6 @@ field string --fieldName externalId --unique --notNull
 module focus --moduleName scraper
 quit
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2012-12-12 07:28:48
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-12-19 12:38:30
+module focus --moduleName core
+jpa setup --database POSTGRES --provider HIBERNATE --databaseName tide-service-dev --userName tide-service-dev --password tide-service-dev --applicationId tide-service --hostName localhost

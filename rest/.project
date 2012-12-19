@@ -1,7 +1,10 @@
 <projectDescription>
   <name>rest</name>
   <comment/>
-  <projects/>
+  <projects>
+    <project>core</project>
+    <project>scraper</project>
+  </projects>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.wst.jsdt.core.javascriptValidator</name>

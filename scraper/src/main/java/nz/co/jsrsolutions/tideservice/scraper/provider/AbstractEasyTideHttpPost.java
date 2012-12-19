@@ -1,7 +1,7 @@
 /* -*- mode: java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 
 /*
- * @(#)ExchangeSymbolKey.java        
+ * @(#)AbstractEasyTideHttpPost.java        
  *
  * Copyright (c) 2012 JSR Solutions Limited
  * 4 Viridian Lane, Auckland, 0632.  New Zealand
@@ -14,27 +14,21 @@
  * with JSR Solutions Limited.
  */
 
-package nz.co.jsrsolutions.util;
 
+package nz.co.jsrsolutions.tideservice.scraper.provider;
 
-public final class ExchangeSymbolKey {
+import java.net.URI;
 
-  private final String key;
-  
-  public ExchangeSymbolKey(final String exchange, final String symbol) {
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicHeader;
+
+public abstract class AbstractEasyTideHttpPost extends HttpPost {
+
+  public AbstractEasyTideHttpPost(URI uri, String viewState) {
     
-    final StringBuffer symbolKeyBuffer = new StringBuffer();
-    symbolKeyBuffer.append(exchange);
-    symbolKeyBuffer.append("-");
-    symbolKeyBuffer.append(symbol);
+    super(uri);
     
-    key = symbolKeyBuffer.toString();
-  
-  }
-
-  public String getKey() {
-    return key;
+    addHeader(new BasicHeader("Content-Type", "application/x-www-form-urlencoded"));
   }
   
 }
-

@@ -16,7 +16,7 @@ import nz.co.jsrsolutions.tideservice.core.domain.AreaDataOnDemand;
 import nz.co.jsrsolutions.tideservice.core.domain.SubArea;
 import nz.co.jsrsolutions.tideservice.core.domain.SubAreaDataOnDemand;
 import nz.co.jsrsolutions.tideservice.core.repository.SubAreaRepository;
-import nz.co.jsrsolutions.tideservice.core.service.SubAreaService;
+import nz.co.jsrsolutions.tideservice.core.service.AreaService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ privileged aspect SubAreaDataOnDemand_Roo_DataOnDemand {
     private AreaDataOnDemand SubAreaDataOnDemand.areaDataOnDemand;
     
     @Autowired
-    SubAreaService SubAreaDataOnDemand.subAreaService;
+    AreaService SubAreaDataOnDemand.areaService;
     
     @Autowired
     SubAreaRepository SubAreaDataOnDemand.subAreaRepository;
@@ -44,6 +44,7 @@ privileged aspect SubAreaDataOnDemand_Roo_DataOnDemand {
         setCreatedBy(obj, index);
         setCreatedDate(obj, index);
         setDescription(obj, index);
+        setExternalId(obj, index);
         setIsActive(obj, index);
         setLastModifiedBy(obj, index);
         setLastModifiedDate(obj, index);
@@ -72,6 +73,14 @@ privileged aspect SubAreaDataOnDemand_Roo_DataOnDemand {
             description = description.substring(0, 255);
         }
         obj.setDescription(description);
+    }
+    
+    public void SubAreaDataOnDemand.setExternalId(SubArea obj, int index) {
+        String externalId = "externalId_" + index;
+        if (externalId.length() > 60) {
+            externalId = externalId.substring(0, 60);
+        }
+        obj.setExternalId(externalId);
     }
     
     public void SubAreaDataOnDemand.setIsActive(SubArea obj, int index) {
@@ -107,14 +116,14 @@ privileged aspect SubAreaDataOnDemand_Roo_DataOnDemand {
         }
         SubArea obj = data.get(index);
         Long id = obj.getId();
-        return subAreaService.findSubArea(id);
+        return areaService.findSubArea(id);
     }
     
     public SubArea SubAreaDataOnDemand.getRandomSubArea() {
         init();
         SubArea obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return subAreaService.findSubArea(id);
+        return areaService.findSubArea(id);
     }
     
     public boolean SubAreaDataOnDemand.modifySubArea(SubArea obj) {
@@ -124,7 +133,7 @@ privileged aspect SubAreaDataOnDemand_Roo_DataOnDemand {
     public void SubAreaDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = subAreaService.findSubAreaEntries(from, to);
+        data = areaService.findSubAreaEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'SubArea' illegally returned null");
         }
@@ -136,7 +145,7 @@ privileged aspect SubAreaDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             SubArea obj = getNewTransientSubArea(i);
             try {
-                subAreaService.saveSubArea(obj);
+                areaService.saveSubArea(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

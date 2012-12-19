@@ -9,6 +9,14 @@ import nz.co.jsrsolutions.tideservice.core.domain.SubArea;
 
 privileged aspect Port_Roo_JavaBean {
     
+    public String Port.getExternalId() {
+        return this.externalId;
+    }
+    
+    public void Port.setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+    
     public String Port.getName() {
         return this.name;
     }
@@ -39,14 +47,6 @@ privileged aspect Port_Roo_JavaBean {
     
     public void Port.setSubArea(SubArea subArea) {
         this.subArea = subArea;
-    }
-    
-    public String Port.getExternalId() {
-        return this.externalId;
-    }
-    
-    public void Port.setExternalId(String externalId) {
-        this.externalId = externalId;
     }
     
 }

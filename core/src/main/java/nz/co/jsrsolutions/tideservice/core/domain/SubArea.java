@@ -3,6 +3,7 @@ package nz.co.jsrsolutions.tideservice.core.domain;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -20,16 +21,21 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson(deepSerialize = true)
 public class SubArea extends DomainBase {
 
-    @Size(max = 60)
-    private String name;
+  @NotNull
+  @Column(unique = false)
+  @Size(max = 60)
+  private String externalId;
 
-    @Size(max = 255)
-    private String description;
+  @Size(max = 60)
+  private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subArea")
-    private Set<Port> ports = new HashSet<Port>();
+  @Size(max = 255)
+  private String description;
 
-    @NotNull
-    @ManyToOne
-    private Area area;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "subArea")
+  private Set<Port> ports = new HashSet<Port>();
+
+  @NotNull
+  @ManyToOne
+  private Area area;
 }

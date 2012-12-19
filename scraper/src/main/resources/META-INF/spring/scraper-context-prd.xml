@@ -5,7 +5,7 @@
 	xsi:schemaLocation="
 			    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 			    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
-	profile="dev">
+	profile="prd">
 
 	<!-- Thread Pool -->
 
@@ -58,9 +58,14 @@
 	</bean>
 
 	<!-- Command beans   -->
-
+	<bean id="updateAreasCommand" class="nz.co.jsrsolutions.tideservice.scraper.command.UpdateAllAreasCommand" scope="singleton">
+	  <constructor-arg name="executorService" ref="threadPoolExecutor" />
+	  <constructor-arg name="tideDataProvider" ref="easyTideTideDataProviderTarget" />
+	</bean>
+	
 	<bean id="updatePortsCommand" class="nz.co.jsrsolutions.tideservice.scraper.command.UpdateAllPortsCommand" scope="singleton">
 	  <constructor-arg name="executorService" ref="threadPoolExecutor" />
+	  <constructor-arg name="tideDataProvider" ref="easyTideTideDataProviderTarget" />
 	</bean>
 
 	<!-- Command Chains -->
@@ -69,6 +74,14 @@
 	  <constructor-arg>
 	    <util:list>
 	      <ref bean="updatePortsCommand" />
+	    </util:list>
+	  </constructor-arg>
+	</bean>
+	
+		<bean name="updateallareas" class="org.apache.commons.chain.impl.ChainBase" scope="singleton">
+	  <constructor-arg>
+	    <util:list>
+	      <ref bean="updateAreasCommand" />
 	    </util:list>
 	  </constructor-arg>
 	</bean>
@@ -275,9 +288,13 @@
 	<!-- EOD provider -->
 	<bean id="easyTideTideDataProviderTarget" class="nz.co.jsrsolutions.tideservice.scraper.provider.EasyTideTideDataProvider"
 		scope="prototype">
-		<constructor-arg name="url"
-			value="http://easytide.ukho.gov.uk/EASYTIDE/EasyTide" />
+		<constructor-arg name="scheme" value="http" />
+		<constructor-arg name="host" value="easytide.ukho.gov.uk" />
+		<constructor-arg name="path" value="/EASYTIDE/EasyTide" />
 		<constructor-arg name="timeout" value="60000" />
+		<constructor-arg name="getAreasUrlSuffix" value="SelectPort.aspx" />
+		<constructor-arg name="getSubAreasUrlSuffix" value="SelectPort.aspx" />
+		<constructor-arg name="getPortsUrlSuffix" value="SelectPort.aspx" />
 	</bean>
 
 	<bean id="poolEasyTideTideDataProviderSource" class="org.springframework.aop.target.CommonsPoolTargetSource">

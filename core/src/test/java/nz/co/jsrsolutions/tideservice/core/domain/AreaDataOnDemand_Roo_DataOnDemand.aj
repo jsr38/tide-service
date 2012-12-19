@@ -38,6 +38,7 @@ privileged aspect AreaDataOnDemand_Roo_DataOnDemand {
         setCreatedBy(obj, index);
         setCreatedDate(obj, index);
         setDescription(obj, index);
+        setExternalId(obj, index);
         setIsActive(obj, index);
         setLastModifiedBy(obj, index);
         setLastModifiedDate(obj, index);
@@ -61,6 +62,14 @@ privileged aspect AreaDataOnDemand_Roo_DataOnDemand {
             description = description.substring(0, 255);
         }
         obj.setDescription(description);
+    }
+    
+    public void AreaDataOnDemand.setExternalId(Area obj, int index) {
+        String externalId = "externalId_" + index;
+        if (externalId.length() > 60) {
+            externalId = new Random().nextInt(10) + externalId.substring(1, 60);
+        }
+        obj.setExternalId(externalId);
     }
     
     public void AreaDataOnDemand.setIsActive(Area obj, int index) {

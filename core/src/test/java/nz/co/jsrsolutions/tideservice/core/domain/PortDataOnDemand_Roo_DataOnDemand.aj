@@ -91,6 +91,9 @@ privileged aspect PortDataOnDemand_Roo_DataOnDemand {
     
     public void PortDataOnDemand.setExternalId(Port obj, int index) {
         String externalId = "externalId_" + index;
+        if (externalId.length() > 30) {
+            externalId = new Random().nextInt(10) + externalId.substring(1, 30);
+        }
         obj.setExternalId(externalId);
     }
     

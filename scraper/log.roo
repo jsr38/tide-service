@@ -7,3 +7,8 @@ dependency add --groupId org.apache.commons --artifactId commons-email --version
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-12-12 10:12:02
 jpa setup --database HYPERSONIC_IN_MEMORY --provider HIBERNATE 
 dependency add --groupId tideservice --artifactId core --version 0.1.0.BUILD-SNAPSHOT
+dependency add --groupId org.apache.httpcomponents --artifactId httpclient --version 4.2.2
+dependency add --groupId org.htmlparser --artifactId htmlparser --version 1.6
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2012-12-12 20:31:06
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-12-14 12:18:46
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2012-12-14 14:29:36

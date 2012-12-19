@@ -16,6 +16,8 @@
 
 package nz.co.jsrsolutions.tideservice.scraper.provider;
 
+import java.util.List;
+
 import nz.co.jsrsolutions.tideservice.core.domain.Area;
 import nz.co.jsrsolutions.tideservice.core.domain.Port;
 import nz.co.jsrsolutions.tideservice.core.domain.SubArea;
@@ -40,7 +42,7 @@ public interface TideDataProvider {
    * @exception   TideDataProviderException
    * 
    */
-  public Area[] getAreas() throws TideDataProviderException;
+  public List<Area> getAreas() throws TideDataProviderException;
 
   /** 
    * 
@@ -52,7 +54,7 @@ public interface TideDataProvider {
    * @exception   TideDataProviderException
    * 
    */
-  public SubArea[] getSubAreas(Area area) throws TideDataProviderException;
+  public List<SubArea> getSubAreas(Area area) throws TideDataProviderException;
   
   /** 
    * 
@@ -64,7 +66,7 @@ public interface TideDataProvider {
    * @exception   TideDataProviderException
    * 
    */
-  public Port[] getPorts(Area area, SubArea subArea) throws TideDataProviderException;
+  public List<Port> getPorts(SubArea subArea) throws TideDataProviderException;
 
   /** 
    * 
@@ -76,6 +78,6 @@ public interface TideDataProvider {
    * @exception   TideDataProviderException
    * 
    */
-  public TidePredictionDay[] getTidePredictionDay(Port port) throws TideDataProviderException;
+  public List<TidePredictionDay> getTidePredictionDay(Port port) throws TideDataProviderException;
   
 }

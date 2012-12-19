@@ -38,6 +38,10 @@ public class TideDataProviderException extends Exception {
     mistake = err;
   }
   
+  public TideDataProviderException(Throwable cause) {
+    super(cause);
+  }  
+  
   public String getError() {
     return mistake;
   }

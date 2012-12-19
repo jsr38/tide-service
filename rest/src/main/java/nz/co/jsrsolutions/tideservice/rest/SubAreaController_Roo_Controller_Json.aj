@@ -5,7 +5,7 @@ package nz.co.jsrsolutions.tideservice.rest;
 
 import java.util.List;
 import nz.co.jsrsolutions.tideservice.core.domain.SubArea;
-import nz.co.jsrsolutions.tideservice.core.service.SubAreaService;
+import nz.co.jsrsolutions.tideservice.core.service.AreaService;
 import nz.co.jsrsolutions.tideservice.rest.SubAreaController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 privileged aspect SubAreaController_Roo_Controller_Json {
     
     @Autowired
-    SubAreaService SubAreaController.subAreaService;
+    AreaService SubAreaController.areaService;
     
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<String> SubAreaController.showJson(@PathVariable("id") Long id) {
-        SubArea subArea = subAreaService.findSubArea(id);
+        SubArea subArea = areaService.findSubArea(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         if (subArea == null) {
@@ -39,14 +39,14 @@ privileged aspect SubAreaController_Roo_Controller_Json {
     public ResponseEntity<String> SubAreaController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        List<SubArea> result = subAreaService.findAllSubAreas();
+        List<SubArea> result = areaService.findAllSubAreas();
         return new ResponseEntity<String>(SubArea.toJsonArray(result), headers, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> SubAreaController.createFromJson(@RequestBody String json) {
         SubArea subArea = SubArea.fromJsonToSubArea(json);
-        subAreaService.saveSubArea(subArea);
+        areaService.saveSubArea(subArea);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
@@ -55,7 +55,7 @@ privileged aspect SubAreaController_Roo_Controller_Json {
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> SubAreaController.createFromJsonArray(@RequestBody String json) {
         for (SubArea subArea: SubArea.fromJsonArrayToSubAreas(json)) {
-            subAreaService.saveSubArea(subArea);
+            areaService.saveSubArea(subArea);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -67,7 +67,7 @@ privileged aspect SubAreaController_Roo_Controller_Json {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         SubArea subArea = SubArea.fromJsonToSubArea(json);
-        if (subAreaService.updateSubArea(subArea) == null) {
+        if (areaService.updateSubArea(subArea) == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<String>(headers, HttpStatus.OK);
@@ -78,7 +78,7 @@ privileged aspect SubAreaController_Roo_Controller_Json {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         for (SubArea subArea: SubArea.fromJsonArrayToSubAreas(json)) {
-            if (subAreaService.updateSubArea(subArea) == null) {
+            if (areaService.updateSubArea(subArea) == null) {
                 return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
             }
         }
@@ -87,13 +87,13 @@ privileged aspect SubAreaController_Roo_Controller_Json {
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<String> SubAreaController.deleteFromJson(@PathVariable("id") Long id) {
-        SubArea subArea = subAreaService.findSubArea(id);
+        SubArea subArea = areaService.findSubArea(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         if (subArea == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        subAreaService.deleteSubArea(subArea);
+        areaService.deleteSubArea(subArea);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     

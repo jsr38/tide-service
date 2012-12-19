@@ -9,6 +9,14 @@ import nz.co.jsrsolutions.tideservice.core.domain.SubArea;
 
 privileged aspect Area_Roo_JavaBean {
     
+    public String Area.getExternalId() {
+        return this.externalId;
+    }
+    
+    public void Area.setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+    
     public String Area.getName() {
         return this.name;
     }

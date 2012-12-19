@@ -18,20 +18,23 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson(deepSerialize = true)
 public class Port extends DomainBase {
 
-    @Size(max = 60)
-    private String name;
+  @NotNull
+  @Column(unique = true)
+  @Size(max = 30)
+  private String externalId;
+  
+  @Size(max = 60)
+  private String name;
 
-    @Size(max = 255)
-    private String description;
+  @Size(max = 255)
+  private String description;
 
-    @Embedded
-    private GeoLocation geoLocation;
+  @Embedded
+  private GeoLocation geoLocation;
 
-    @NotNull
-    @ManyToOne
-    private SubArea subArea;
+  @NotNull
+  @ManyToOne
+  private SubArea subArea;
 
-    @NotNull
-    @Column(unique = true)
-    private String externalId;
+
 }

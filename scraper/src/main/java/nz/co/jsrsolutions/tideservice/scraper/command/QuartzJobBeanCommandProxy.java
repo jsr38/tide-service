@@ -81,8 +81,8 @@ public class QuartzJobBeanCommandProxy extends QuartzJobBean {
     //context.put(CommandContext.EXCHANGE_KEY, exchange);
 
     try {
-      Command cmd = CommandFactory.create(command, _executorService);
-      cmd.execute(context);
+      //Command cmd = CommandFactory.create(command, _executorService);
+      //cmd.execute(context);
     }
     catch (Exception e) {
       throw new JobExecutionException(e);

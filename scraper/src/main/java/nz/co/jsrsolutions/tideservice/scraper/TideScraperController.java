@@ -29,13 +29,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedOperationParameter;
+import org.springframework.jmx.export.annotation.ManagedOperationParameters;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
-@ManagedResource(objectName = "bean:name=controller", description = "tide scraper controller MBean", log = true, logFile = "jmx.log", currencyTimeLimit = 15, persistPolicy = "OnUpdate", persistPeriod = 200, persistLocation = "foo", persistName = "bar")
+@ManagedResource(objectName = "TideDataScraper:name=controller", description = "Tide Scraper Controller MBean", log = true, logFile = "jmx.log", currencyTimeLimit = 15, persistPolicy = "OnUpdate", persistPeriod = 200, persistLocation = "foo", persistName = "bar")
 final public class TideScraperController implements ApplicationContextAware {
 
-  @SuppressWarnings("unused")
-  private static final transient Logger logger = Logger
+  private static final transient Logger mLogger = Logger
       .getLogger(TideScraperController.class);
   
 //  private EodDataProvider _eodDataProvider;
@@ -90,6 +91,21 @@ final public class TideScraperController implements ApplicationContextAware {
       throw new TideScraperException(e);
     }
 
+  }
+  
+  @ManagedOperation(description = "Execute Command")
+  @ManagedOperationParameters({
+    @ManagedOperationParameter(name = "cmd", description = "The command to be executed")})
+  public void execute(String cmd) throws TideScraperException {
+    try {
+
+      Command command = (Command)_appContext.getBean(cmd);
+      command.execute(new CommandContext());
+    
+    } catch (Exception e) {
+      mLogger.error("Unable to execute command: ", e);
+      throw new TideScraperException(e);
+    }
   }
 
   @ManagedOperation(description = "Kill the service")

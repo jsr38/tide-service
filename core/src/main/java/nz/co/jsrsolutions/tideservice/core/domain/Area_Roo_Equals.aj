@@ -17,11 +17,11 @@ privileged aspect Area_Roo_Equals {
             return true;
         }
         Area rhs = (Area) obj;
-        return new EqualsBuilder().append(createdBy, rhs.createdBy).append(createdDate, rhs.createdDate).append(description, rhs.description).append(id, rhs.id).append(isActive, rhs.isActive).append(lastModifiedBy, rhs.lastModifiedBy).append(lastModifiedDate, rhs.lastModifiedDate).append(name, rhs.name).isEquals();
+        return new EqualsBuilder().append(createdBy, rhs.createdBy).append(createdDate, rhs.createdDate).append(description, rhs.description).append(externalId, rhs.externalId).append(id, rhs.id).append(isActive, rhs.isActive).append(lastModifiedBy, rhs.lastModifiedBy).append(lastModifiedDate, rhs.lastModifiedDate).append(name, rhs.name).isEquals();
     }
     
     public int Area.hashCode() {
-        return new HashCodeBuilder().append(createdBy).append(createdDate).append(description).append(id).append(isActive).append(lastModifiedBy).append(lastModifiedDate).append(name).toHashCode();
+        return new HashCodeBuilder().append(createdBy).append(createdDate).append(description).append(externalId).append(id).append(isActive).append(lastModifiedBy).append(lastModifiedDate).append(name).toHashCode();
     }
     
 }

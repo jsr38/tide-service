@@ -1,7 +1,7 @@
 /* -*- mode: java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 
 /*
- * @(#)PortExternalIdNameDescriptionComparator.java        
+ * @(#)DistanceCalculator.java        
  *
  * Copyright (c) 2012 JSR Solutions Limited
  * 4 Viridian Lane, Auckland, 0632.  New Zealand
@@ -16,16 +16,10 @@
 
 package nz.co.jsrsolutions.tideservice.core.util;
 
-import java.util.Comparator;
+import nz.co.jsrsolutions.tideservice.core.domain.GeoLocation;
 
-import nz.co.jsrsolutions.tideservice.core.domain.Port;
+public interface DistanceCalculator {
 
-public class PortExternalIdNameDescriptionComparator implements Comparator<Port> {
-
-  @Override
-  public int compare(Port port0, Port port1) {
-    
-    return 0;
-  }
-
+  public abstract double calculate(GeoLocation geoLocation1, GeoLocation geoLocation2);
+  
 }

@@ -36,7 +36,11 @@ public class Port extends DomainBase {
 
   @NotNull
   @Value("false")
-  private boolean isGeoCoded;
+  private boolean geoCoded;
+  
+  @NotNull
+  @Value("false")
+  private boolean geoCodingAttempted;
   
   @NotNull
   @ManyToOne

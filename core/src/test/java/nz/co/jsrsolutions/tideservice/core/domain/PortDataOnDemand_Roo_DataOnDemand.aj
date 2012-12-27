@@ -46,8 +46,9 @@ privileged aspect PortDataOnDemand_Roo_DataOnDemand {
         setCreatedDate(obj, index);
         setDescription(obj, index);
         setExternalId(obj, index);
+        setGeoCoded(obj, index);
+        setGeoCodingAttempted(obj, index);
         setIsActive(obj, index);
-        setIsGeoCoded(obj, index);
         setLastModifiedBy(obj, index);
         setLastModifiedDate(obj, index);
         setName(obj, index);
@@ -98,14 +99,19 @@ privileged aspect PortDataOnDemand_Roo_DataOnDemand {
         obj.setExternalId(externalId);
     }
     
+    public void PortDataOnDemand.setGeoCoded(Port obj, int index) {
+        Boolean geoCoded = true;
+        obj.setGeoCoded(geoCoded);
+    }
+    
+    public void PortDataOnDemand.setGeoCodingAttempted(Port obj, int index) {
+        Boolean geoCodingAttempted = true;
+        obj.setGeoCodingAttempted(geoCodingAttempted);
+    }
+    
     public void PortDataOnDemand.setIsActive(Port obj, int index) {
         Boolean isActive = Boolean.TRUE;
         obj.setIsActive(isActive);
-    }
-    
-    public void PortDataOnDemand.setIsGeoCoded(Port obj, int index) {
-        Boolean isGeoCoded = true;
-        obj.setIsGeoCoded(isGeoCoded);
     }
     
     public void PortDataOnDemand.setLastModifiedBy(Port obj, int index) {

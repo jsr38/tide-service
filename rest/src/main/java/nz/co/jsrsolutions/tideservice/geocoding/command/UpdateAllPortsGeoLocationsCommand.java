@@ -61,7 +61,7 @@ public class UpdateAllPortsGeoLocationsCommand implements Command {
 
     for (Port port : ports) {
 
-      if (!port.isIsGeoCoded()) {
+      if (!port.isGeoCodingAttempted()) {
 
         ++numRequests;
         try {
@@ -77,14 +77,13 @@ public class UpdateAllPortsGeoLocationsCommand implements Command {
           mLogger.info(message.toString());
 
           port.setGeoLocation(geoLoc);
-          port.setIsGeoCoded(true);
-          mPortService.updatePort(port);
+          port.setGeoCoded(true);  
           
         } catch (TideDataGeoCoderException e) {
           mLogger.error("Unable to geocode port " + port.getExternalId(), e);
-          //throw new TideDataGeoCoderException(e);
         }
-
+        port.setGeoCodingAttempted(true);
+        mPortService.updatePort(port);
       }
       
       if (numRequests >= mMaxRequests) {

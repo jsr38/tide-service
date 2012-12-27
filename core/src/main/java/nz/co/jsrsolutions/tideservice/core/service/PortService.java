@@ -3,6 +3,7 @@ package nz.co.jsrsolutions.tideservice.core.service;
 import java.util.List;
 import java.util.Set;
 
+import nz.co.jsrsolutions.tideservice.core.domain.GeoLocation;
 import nz.co.jsrsolutions.tideservice.core.domain.Port;
 
 import org.springframework.roo.addon.layers.service.RooService;
@@ -26,5 +27,16 @@ public interface PortService {
    * @return
    */
   public abstract Set<Port> updatePorts(long subAreaId, List<Port> ports);
+  
+  /**
+   * 
+   * Gets the nearest numPorts ports to the supplied geolocation,
+   * ordered by ascending distance from the location
+   * 
+   * @param geoLocation
+   * @param numPorts
+   * @return
+   */
+  public abstract List<Port> findNearestNeighbours(GeoLocation geoLocation, int numPorts);
   
 }

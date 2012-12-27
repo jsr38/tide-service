@@ -12,8 +12,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson(deepSerialize = true)
 public class GeoLocation {
   
-    private int latitude;
+    private long latitude;
     
 
-    private int longitude;
+    private long longitude;
 }

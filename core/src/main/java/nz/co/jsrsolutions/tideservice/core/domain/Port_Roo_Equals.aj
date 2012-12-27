@@ -17,11 +17,11 @@ privileged aspect Port_Roo_Equals {
             return true;
         }
         Port rhs = (Port) obj;
-        return new EqualsBuilder().append(createdBy, rhs.createdBy).append(createdDate, rhs.createdDate).append(description, rhs.description).append(externalId, rhs.externalId).append(geoLocation, rhs.geoLocation).append(id, rhs.id).append(isActive, rhs.isActive).append(lastModifiedBy, rhs.lastModifiedBy).append(lastModifiedDate, rhs.lastModifiedDate).append(name, rhs.name).append(subArea, rhs.subArea).isEquals();
+        return new EqualsBuilder().append(createdBy, rhs.createdBy).append(createdDate, rhs.createdDate).append(description, rhs.description).append(externalId, rhs.externalId).append(geoLocation, rhs.geoLocation).append(id, rhs.id).append(isActive, rhs.isActive).append(isGeoCoded, rhs.isGeoCoded).append(lastModifiedBy, rhs.lastModifiedBy).append(lastModifiedDate, rhs.lastModifiedDate).append(name, rhs.name).append(subArea, rhs.subArea).isEquals();
     }
     
     public int Port.hashCode() {
-        return new HashCodeBuilder().append(createdBy).append(createdDate).append(description).append(externalId).append(geoLocation).append(id).append(isActive).append(lastModifiedBy).append(lastModifiedDate).append(name).append(subArea).toHashCode();
+        return new HashCodeBuilder().append(createdBy).append(createdDate).append(description).append(externalId).append(geoLocation).append(id).append(isActive).append(isGeoCoded).append(lastModifiedBy).append(lastModifiedDate).append(name).append(subArea).toHashCode();
     }
     
 }

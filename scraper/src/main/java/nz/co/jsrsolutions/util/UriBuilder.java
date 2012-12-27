@@ -41,5 +41,35 @@ public class UriBuilder {
     
     return mBuilder.build();
   }
+  
+  public URI build() throws URISyntaxException {
+    return mBuilder.build();
+  }
+  
+  public URI buildGetPredictionUri(String urlSuffix, String portId, int predictionLength) throws URISyntaxException {
+    
+    
+    mBuilder.setPath(mPath + "/" + urlSuffix);
+    mBuilder.setParameter("PortID", portId);
+    mBuilder.setParameter("PredictionLength", String.valueOf(predictionLength));
+    mBuilder.setParameter("DaylightSavingOffset", String.valueOf(0));
+    mBuilder.setParameter("PrinterFriendly", "True");
+    mBuilder.setParameter("HeightUnits", String.valueOf(0));
+    mBuilder.setParameter("GraphSize", String.valueOf(1));
+    
+    return mBuilder.build();
+    
+  }
+  
+  public URI buildGetGeoLocUri(String address) throws URISyntaxException {
+    
+    
+    mBuilder.setPath(mPath);
+    mBuilder.setParameter("address", address);
+    mBuilder.setParameter("sensor", String.valueOf(false));
+    
+    return mBuilder.build();
+    
+  }
 
 }

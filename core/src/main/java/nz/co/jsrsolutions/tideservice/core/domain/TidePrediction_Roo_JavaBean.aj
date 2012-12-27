@@ -34,6 +34,14 @@ privileged aspect TidePrediction_Roo_JavaBean {
         this.height = height;
     }
     
+    public boolean TidePrediction.isIsEstimate() {
+        return this.isEstimate;
+    }
+    
+    public void TidePrediction.setIsEstimate(boolean isEstimate) {
+        this.isEstimate = isEstimate;
+    }
+    
     public TidePredictionDay TidePrediction.getTidePredictionDay() {
         return this.tidePredictionDay;
     }

@@ -17,11 +17,11 @@ privileged aspect TidePrediction_Roo_Equals {
             return true;
         }
         TidePrediction rhs = (TidePrediction) obj;
-        return new EqualsBuilder().append(createdBy, rhs.createdBy).append(createdDate, rhs.createdDate).append(height, rhs.height).append(id, rhs.id).append(isActive, rhs.isActive).append(lastModifiedBy, rhs.lastModifiedBy).append(lastModifiedDate, rhs.lastModifiedDate).append(tidePredictionDay, rhs.tidePredictionDay).append(tidePredictionType, rhs.tidePredictionType).append(utcTime, rhs.utcTime).isEquals();
+        return new EqualsBuilder().append(createdBy, rhs.createdBy).append(createdDate, rhs.createdDate).append(height, rhs.height).append(id, rhs.id).append(isActive, rhs.isActive).append(isEstimate, rhs.isEstimate).append(lastModifiedBy, rhs.lastModifiedBy).append(lastModifiedDate, rhs.lastModifiedDate).append(tidePredictionDay, rhs.tidePredictionDay).append(tidePredictionType, rhs.tidePredictionType).append(utcTime, rhs.utcTime).isEquals();
     }
     
     public int TidePrediction.hashCode() {
-        return new HashCodeBuilder().append(createdBy).append(createdDate).append(height).append(id).append(isActive).append(lastModifiedBy).append(lastModifiedDate).append(tidePredictionDay).append(tidePredictionType).append(utcTime).toHashCode();
+        return new HashCodeBuilder().append(createdBy).append(createdDate).append(height).append(id).append(isActive).append(isEstimate).append(lastModifiedBy).append(lastModifiedDate).append(tidePredictionDay).append(tidePredictionType).append(utcTime).toHashCode();
     }
     
 }

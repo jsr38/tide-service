@@ -41,6 +41,14 @@ privileged aspect Port_Roo_JavaBean {
         this.geoLocation = geoLocation;
     }
     
+    public boolean Port.isIsGeoCoded() {
+        return this.isGeoCoded;
+    }
+    
+    public void Port.setIsGeoCoded(boolean isGeoCoded) {
+        this.isGeoCoded = isGeoCoded;
+    }
+    
     public SubArea Port.getSubArea() {
         return this.subArea;
     }

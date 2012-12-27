@@ -45,6 +45,7 @@ privileged aspect TidePredictionDataOnDemand_Roo_DataOnDemand {
         setCreatedDate(obj, index);
         setHeight(obj, index);
         setIsActive(obj, index);
+        setIsEstimate(obj, index);
         setLastModifiedBy(obj, index);
         setLastModifiedDate(obj, index);
         setTidePredictionDay(obj, index);
@@ -71,6 +72,11 @@ privileged aspect TidePredictionDataOnDemand_Roo_DataOnDemand {
     public void TidePredictionDataOnDemand.setIsActive(TidePrediction obj, int index) {
         Boolean isActive = Boolean.TRUE;
         obj.setIsActive(isActive);
+    }
+    
+    public void TidePredictionDataOnDemand.setIsEstimate(TidePrediction obj, int index) {
+        Boolean isEstimate = true;
+        obj.setIsEstimate(isEstimate);
     }
     
     public void TidePredictionDataOnDemand.setLastModifiedBy(TidePrediction obj, int index) {

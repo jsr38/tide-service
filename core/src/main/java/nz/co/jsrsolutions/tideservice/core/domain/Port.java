@@ -5,6 +5,8 @@ import javax.persistence.Embedded;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.equals.RooEquals;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -32,6 +34,10 @@ public class Port extends DomainBase {
   @Embedded
   private GeoLocation geoLocation;
 
+  @NotNull
+  @Value("false")
+  private boolean isGeoCoded;
+  
   @NotNull
   @ManyToOne
   private SubArea subArea;

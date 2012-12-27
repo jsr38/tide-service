@@ -7,19 +7,19 @@ import nz.co.jsrsolutions.tideservice.core.domain.GeoLocation;
 
 privileged aspect GeoLocation_Roo_JavaBean {
     
-    public int GeoLocation.getLatitude() {
+    public long GeoLocation.getLatitude() {
         return this.latitude;
     }
     
-    public void GeoLocation.setLatitude(int latitude) {
+    public void GeoLocation.setLatitude(long latitude) {
         this.latitude = latitude;
     }
     
-    public int GeoLocation.getLongitude() {
+    public long GeoLocation.getLongitude() {
         return this.longitude;
     }
     
-    public void GeoLocation.setLongitude(int longitude) {
+    public void GeoLocation.setLongitude(long longitude) {
         this.longitude = longitude;
     }
     

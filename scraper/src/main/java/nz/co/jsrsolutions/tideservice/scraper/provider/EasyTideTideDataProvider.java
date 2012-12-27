@@ -29,7 +29,9 @@ import javax.xml.bind.DatatypeConverter;
 import nz.co.jsrsolutions.tideservice.core.domain.Area;
 import nz.co.jsrsolutions.tideservice.core.domain.Port;
 import nz.co.jsrsolutions.tideservice.core.domain.SubArea;
+import nz.co.jsrsolutions.tideservice.core.domain.TidePrediction;
 import nz.co.jsrsolutions.tideservice.core.domain.TidePredictionDay;
+import nz.co.jsrsolutions.tideservice.core.reference.TidePredictionType;
 import nz.co.jsrsolutions.util.UriBuilder;
 
 import org.apache.http.HttpEntity;
@@ -56,6 +58,12 @@ import org.htmlparser.tags.InputTag;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 
 public class EasyTideTideDataProvider implements TideDataProvider {
 
@@ -63,31 +71,75 @@ public class EasyTideTideDataProvider implements TideDataProvider {
       .getLogger(EasyTideTideDataProvider.class);
 
   private final HttpClient mHttpClient;
+
   private final UriBuilder mUriBuilder;
+
   private final String mScheme;
+
   private final String mHost;
+
   private final String mPath;
+
   private final String mGetAreasUrlSuffix;
+
   private final String mGetSubAreasUrlSuffix;
-  private final String mGetPortsUrlSuffix;
-  private static final String mPostbackRegexString = new String(
+
+  private final String mGetTidePredictionUrlSuffix;
+
+  private static final transient String mPostbackRegexString = new String(
       "javascript:__doPostBack\\('(.*)',.*");
-  private static final Pattern mPostbackRegexPattern = Pattern
+
+  private static final transient Pattern mPostbackRegexPattern = Pattern
       .compile(mPostbackRegexString);
-  private static final String mPortIdRegexString = new String(
+
+  private static final transient String mPortIdRegexString = new String(
       ".*PortID=(.*)");
-  private static final Pattern mPortIdRegexPattern = Pattern
+
+  private static final transient Pattern mPortIdRegexPattern = Pattern
       .compile(mPortIdRegexString);
+
+  private static final transient String mTimeZoneRegexString = new String(
+      "Port predictions \\(Standard Local Time\\) are ([+|-]\\d+) hours? ((\\d+) mins)?\\s?from UTC");
+
+  private static final transient Pattern mTimeZoneRegexPattern = Pattern
+      .compile(mTimeZoneRegexString);
+
+  private static final transient String mTodayRegexString = new String(
+      "Today - (.*?\\d+)\\w{2}(.*)");
+
+  private static final transient Pattern mTodayRegexPattern = Pattern
+      .compile(mTodayRegexString);
+
+  private static final transient String mTideHeightRegexString = new String(
+      "(\\d+.\\d+)+.*");
+
+  private static final transient Pattern mTideHeightRegexPattern = Pattern
+      .compile(mTideHeightRegexString);
+
+  private static final transient DateTimeFormatter mLocalDateFormatter;
+
+  private static final transient DateTimeFormatter mLocalTimeFormatter;
+
+  static {
+    mLocalDateFormatter = new DateTimeFormatterBuilder().appendDayOfWeekText()
+        .appendLiteral(' ').appendDayOfMonth(1).appendLiteral(' ')
+        .appendMonthOfYearText().appendLiteral(' ').appendYear(4, 4)
+        .appendLiteral(' ').toFormatter();
+
+    mLocalTimeFormatter = new DateTimeFormatterBuilder().appendLiteral(' ')
+        .appendHourOfDay(2).appendLiteral(':').appendMinuteOfHour(2)
+        .toFormatter();
+  }
 
   public EasyTideTideDataProvider(String scheme, String host, String path,
       String getAreasUrlSuffix, String getSubAreasUrlSuffix,
-      String getPortsUrlSuffix, long timeout) {
+      String getTidePredictionUrlSuffix, long timeout) {
     mScheme = scheme;
     mHost = host;
     mPath = path;
     mGetAreasUrlSuffix = getAreasUrlSuffix;
     mGetSubAreasUrlSuffix = getSubAreasUrlSuffix;
-    mGetPortsUrlSuffix = getPortsUrlSuffix;
+    mGetTidePredictionUrlSuffix = getTidePredictionUrlSuffix;
     mHttpClient = new DefaultHttpClient();
     mUriBuilder = new UriBuilder(mScheme, mHost, mPath);
   }
@@ -296,20 +348,21 @@ public class EasyTideTideDataProvider implements TideDataProvider {
       if (postRequest != null) {
         postRequest.releaseConnection();
       }
-      
+
       // ......
       ArrayList<Port> ports = new ArrayList<Port>();
-      
+
       // Parse the pager links from the port selection table
       NodeList pagerNodeList = new NodeList();
-      NodeFilter filter = new AndFilter(new TagNameFilter("A"),
+      NodeFilter filter = new AndFilter(
+          new TagNameFilter("A"),
           new HasParentFilter(new HasAttributeFilter("ID", "PSL_dlPager"), true));
 
       parser.reset();
       for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
         e.nextNode().collectInto(pagerNodeList, filter);
       }
-      
+
       // remove the first pager link because we
       // assume (!) that we already have the
       // links for the first page
@@ -317,13 +370,13 @@ public class EasyTideTideDataProvider implements TideDataProvider {
         // throw away the result
         pagerNodeList.remove(0);
       }
-      
+
       // Do this for each page of port links
       do {
         // Parse the links from the port selection table
         NodeList list = new NodeList();
-        filter = new AndFilter(new TagNameFilter("A"),
-            new HasParentFilter(new HasAttributeFilter("ID", "PSL_dl"), true));
+        filter = new AndFilter(new TagNameFilter("A"), new HasParentFilter(
+            new HasAttributeFilter("ID", "PSL_dl"), true));
 
         parser.reset();
         for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
@@ -370,13 +423,12 @@ public class EasyTideTideDataProvider implements TideDataProvider {
           // pageState = getPageState(getHtmlParser(response));
           String location = response.getFirstHeader("Location").getValue();
           Matcher externalIdMatcher = mPortIdRegexPattern.matcher(location);
-          
+
           if (externalIdMatcher.matches()) {
             port.setExternalId(externalIdMatcher.group(1));
           } else {
             throw new TideDataProviderException(
-                "Couldn't match portId from location: "
-                    .concat(location));
+                "Couldn't match portId from location: ".concat(location));
           }
 
           EntityUtils.consume(response.getEntity());
@@ -386,10 +438,10 @@ public class EasyTideTideDataProvider implements TideDataProvider {
 
           ports.add(port);
         }
-        
+
         if (pagerNodeList.size() > 0) {
           // Get the next page of port results
-          final TagNode tagNode = (TagNode)pagerNodeList.remove(0);
+          final TagNode tagNode = (TagNode) pagerNodeList.remove(0);
           final String link = tagNode.getAttribute("HREF");
           final Matcher matcher = mPostbackRegexPattern.matcher(link);
 
@@ -404,8 +456,9 @@ public class EasyTideTideDataProvider implements TideDataProvider {
           // Select next page POST
           postRequest = new EasyTidePageLinkClickHttpPost(
               mUriBuilder.build(mGetAreasUrlSuffix), pageState.getViewState(),
-              pageState.getEventValidation(), subArea.getArea().getExternalId(),
-              subArea.getExternalId(), controlId);
+              pageState.getEventValidation(),
+              subArea.getArea().getExternalId(), subArea.getExternalId(),
+              controlId);
           response = mHttpClient.execute(postRequest);
 
           if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
@@ -419,9 +472,9 @@ public class EasyTideTideDataProvider implements TideDataProvider {
           if (postRequest != null) {
             postRequest.releaseConnection();
           }
-          
+
         }
-        
+
       } while (pagerNodeList.size() > 0);
 
       return ports;
@@ -446,8 +499,187 @@ public class EasyTideTideDataProvider implements TideDataProvider {
   @Override
   public List<TidePredictionDay> getTidePredictionDay(Port port)
       throws TideDataProviderException {
-    // TODO Auto-generated method stub
-    return null;
+
+    HttpGet getRequest;
+    try {
+
+      getRequest = new EasyTideHttpGet(mUriBuilder.buildGetPredictionUri(
+          mGetTidePredictionUrlSuffix, port.getExternalId(), 3));
+      HttpResponse response = mHttpClient.execute(getRequest);
+
+      Parser parser = getHtmlParser(response);
+
+      // Parse the timezone information
+      NodeList nodeList = new NodeList();
+      NodeFilter filter = new AndFilter(new TagNameFilter("SPAN"),
+          new HasAttributeFilter("ID", "PredictionSummary1_lblZoneTimeOffset"));
+
+      parser.reset();
+      for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
+        e.nextNode().collectInto(nodeList, filter);
+      }
+
+      if (nodeList.size() != 1) {
+        throw new TideDataProviderException(
+            "Couldn't retrieve the time zone information");
+      }
+
+      String timeZoneString = ((TagNode) nodeList.elementAt(0)).getChildren()
+          .elementAt(0).getText();
+      Matcher timeZoneMatcher = mTimeZoneRegexPattern.matcher(timeZoneString);
+
+      // attempt the common case first
+      int hoursOffset;
+      int minutesOffset;
+      if (timeZoneMatcher.matches()) {
+
+        hoursOffset = Integer.parseInt(timeZoneMatcher.group(1));
+        final String minutesString = timeZoneMatcher.group(3);
+        minutesOffset = (minutesString == null) ? 0 : Integer
+            .parseInt(minutesString);
+
+      } else if (timeZoneString.compareTo("Port predictions (Standard Local Time) are equal to UTC") == 0) {
+        // is already UTC
+        hoursOffset = 0;
+        minutesOffset = 0;
+      } else {
+        throw new TideDataProviderException(
+            "Couldn't parse the time zone information from: "
+                .concat(timeZoneString));
+      }
+      final DateTimeZone timeZone = DateTimeZone.forOffsetHoursMinutes(
+          hoursOffset, minutesOffset);
+
+      // Parse the current day (today) information
+      nodeList = new NodeList();
+      filter = new AndFilter(new TagNameFilter("SPAN"), new HasAttributeFilter(
+          "ID", "PredictionSummary1_lblPredictionStart"));
+
+      parser.reset();
+      for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
+        e.nextNode().collectInto(nodeList, filter);
+      }
+
+      if (nodeList.size() != 1) {
+        throw new TideDataProviderException("Couldn't retrieve today's date");
+      }
+
+      String todayString = ((TagNode) nodeList.elementAt(0)).getChildren()
+          .elementAt(0).getText();
+      Matcher todayMatcher = mTodayRegexPattern.matcher(todayString);
+
+      LocalDate localDate;
+      if (todayMatcher.matches()) {
+        localDate = LocalDate.parse(
+            todayMatcher.group(1).concat(todayMatcher.group(2)),
+            mLocalDateFormatter);
+      } else {
+        throw new TideDataProviderException(
+            "Couldn't parse the time zone information from: "
+                .concat(timeZoneString));
+      }
+
+      // Get each of the HW,LW tables
+      nodeList = new NodeList();
+      filter = new AndFilter(new TagNameFilter("TABLE"), new OrFilter(
+          new HasAttributeFilter("CLASS", "HWLWTable"), new OrFilter(
+              new HasAttributeFilter("CLASS", "HWLWTable first"), new OrFilter(
+                  new HasAttributeFilter("CLASS", "HWLWTable last"),
+                  new HasAttributeFilter("CLASS", "HWLWTable first last")))));
+
+      parser.reset();
+      for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
+        e.nextNode().collectInto(nodeList, filter);
+      }
+
+      int numDays = nodeList.size();
+      final List<TidePredictionDay> tidePredictionDays = new ArrayList<TidePredictionDay>(
+          numDays);
+
+      for (int nDay = 0; nDay < numDays; ++nDay) {
+
+        final TagNode tagNode = (TagNode) nodeList.elementAt(nDay);
+
+        final TidePredictionDay tidePredictionDay = new TidePredictionDay();
+        tidePredictionDay.setLocalDate(localDate);
+
+        // LWHW
+        NodeList lwHwNodeList = new NodeList();
+        filter = new AndFilter(new TagNameFilter("TH"), new HasAttributeFilter(
+            "CLASS", "HWLWTableHWLWCellPrintFriendly"));
+        tagNode.collectInto(lwHwNodeList, filter);
+
+        // Times and Heights
+        NodeList timeHeightNodeList = new NodeList();
+        filter = new AndFilter(new TagNameFilter("TD"), new HasAttributeFilter(
+            "CLASS", "HWLWTableCellPrintFriendly"));
+        tagNode.collectInto(timeHeightNodeList, filter);
+
+        int numTides = lwHwNodeList.size();
+
+        for (int nTide = 0; nTide < numTides; ++nTide) {
+          final TidePrediction tidePrediction = new TidePrediction();
+
+          tidePrediction.setTidePredictionType(TidePredictionType
+              .fromString(lwHwNodeList.elementAt(nTide).getChildren()
+                  .elementAt(0).getText()));
+
+          // Set the time
+          LocalTime localTime;
+          String localTimeString = timeHeightNodeList.elementAt(nTide)
+              .getChildren().elementAt(0).getText();
+          if (localTimeString != null && !localTimeString.isEmpty()
+              && localTimeString.compareTo("&nbsp;") != 0) {
+            if (localTimeString.contains("*")) {
+              localTimeString = localTimeString.replace("*", "");
+              tidePrediction.setIsEstimate(true);
+            }
+            localTime = mLocalTimeFormatter.parseLocalTime(localTimeString);
+          } else {
+            // we can't really make out that this is a sensible prediction
+            // so don't include this
+            continue;
+          }
+
+          final DateTime dateTime = localDate.toDateTime(localTime, timeZone);
+          tidePrediction.setUtcTime(dateTime);
+
+          // Set the height where possible
+          final String heightString = timeHeightNodeList
+              .elementAt(nTide + numTides).getChildren().elementAt(0).getText();
+
+          if (heightString != null && !heightString.isEmpty()) {
+
+            Matcher tideHeightMatcher = mTideHeightRegexPattern
+                .matcher(heightString);
+            if (tideHeightMatcher.matches()) {
+              tidePrediction.setHeight(Float.parseFloat(tideHeightMatcher
+                  .group(1)));
+            }
+
+          }
+
+          // Tie both together
+          tidePrediction.setTidePredictionDay(tidePredictionDay);
+          tidePredictionDay.getTidePredictions().add(tidePrediction);
+        }
+
+        tidePredictionDays.add(tidePredictionDay);
+        localDate = localDate.plusDays(1);
+      }
+
+      return tidePredictionDays;
+
+    } catch (URISyntaxException e) {
+      throw new TideDataProviderException(e);
+    } catch (IOException e) {
+      throw new TideDataProviderException(e);
+    } catch (ParseException e) {
+      throw new TideDataProviderException(e);
+    } catch (ParserException e) {
+      throw new TideDataProviderException(e);
+    }
+
   }
 
   private Parser getHtmlParser(HttpResponse response) throws ParseException,

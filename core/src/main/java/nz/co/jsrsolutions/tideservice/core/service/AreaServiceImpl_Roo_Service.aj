@@ -21,34 +21,6 @@ privileged aspect AreaServiceImpl_Roo_Service {
     @Autowired
     AreaRepository AreaServiceImpl.areaRepository;
     
-    public long AreaServiceImpl.countAllAreas() {
-        return areaRepository.count();
-    }
-    
-    public void AreaServiceImpl.deleteArea(Area area) {
-        areaRepository.delete(area);
-    }
-    
-    public Area AreaServiceImpl.findArea(Long id) {
-        return areaRepository.findOne(id);
-    }
-    
-    public List<Area> AreaServiceImpl.findAllAreas() {
-        return areaRepository.findAll();
-    }
-    
-    public List<Area> AreaServiceImpl.findAreaEntries(int firstResult, int maxResults) {
-        return areaRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
-    }
-    
-    public void AreaServiceImpl.saveArea(Area area) {
-        areaRepository.save(area);
-    }
-    
-    public Area AreaServiceImpl.updateArea(Area area) {
-        return areaRepository.save(area);
-    }
-    
     public long AreaServiceImpl.countAllSubAreas() {
         return subAreaRepository.count();
     }
@@ -75,6 +47,34 @@ privileged aspect AreaServiceImpl_Roo_Service {
     
     public SubArea AreaServiceImpl.updateSubArea(SubArea subArea) {
         return subAreaRepository.save(subArea);
+    }
+    
+    public long AreaServiceImpl.countAllAreas() {
+        return areaRepository.count();
+    }
+    
+    public void AreaServiceImpl.deleteArea(Area area) {
+        areaRepository.delete(area);
+    }
+    
+    public Area AreaServiceImpl.findArea(Long id) {
+        return areaRepository.findOne(id);
+    }
+    
+    public List<Area> AreaServiceImpl.findAllAreas() {
+        return areaRepository.findAll();
+    }
+    
+    public List<Area> AreaServiceImpl.findAreaEntries(int firstResult, int maxResults) {
+        return areaRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+    
+    public void AreaServiceImpl.saveArea(Area area) {
+        areaRepository.save(area);
+    }
+    
+    public Area AreaServiceImpl.updateArea(Area area) {
+        return areaRepository.save(area);
     }
     
 }

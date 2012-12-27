@@ -5,6 +5,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import nz.co.jsrsolutions.tideservice.core.reference.TidePredictionType;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.equals.RooEquals;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -29,6 +30,10 @@ public class TidePrediction extends DomainBase {
 
     private Float height;
 
+    @NotNull
+    @Value("false")
+    private boolean isEstimate;
+    
     @NotNull
     @ManyToOne
     private TidePredictionDay tidePredictionDay;

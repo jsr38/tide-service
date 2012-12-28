@@ -37,7 +37,7 @@ public class PortDistancePair implements Comparable<PortDistancePair> {
     }
     // unlikely, but to ensure consistency with equals() (ish), 
     // TODO:  Do this properly
-    return mPort.getName().compareTo(arg0.getPort().getName());
+    return mPort.getId().compareTo(arg0.getPort().getId());
   }
 
   public double getDistance() {

@@ -13,7 +13,7 @@ import nz.co.jsrsolutions.tideservice.core.domain.Port;
 privileged aspect Port_Roo_Json {
     
     public String Port.toJson() {
-        return new JSONSerializer().exclude("*.class").deepSerialize(this);
+        return new JSONSerializer().exclude("*.class").serialize(this);
     }
     
     public static Port Port.fromJsonToPort(String json) {
@@ -21,7 +21,7 @@ privileged aspect Port_Roo_Json {
     }
     
     public static String Port.toJsonArray(Collection<Port> collection) {
-        return new JSONSerializer().exclude("*.class").deepSerialize(collection);
+        return new JSONSerializer().exclude("*.class").serialize(collection);
     }
     
     public static Collection<Port> Port.fromJsonArrayToPorts(String json) {

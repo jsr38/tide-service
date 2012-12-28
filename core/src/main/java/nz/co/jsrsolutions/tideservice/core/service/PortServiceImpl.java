@@ -1,9 +1,9 @@
 package nz.co.jsrsolutions.tideservice.core.service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -89,19 +89,24 @@ public class PortServiceImpl implements PortService {
   @Transactional(readOnly = true)
   public List<Port> findNearestNeighbours(GeoLocation geoLocation, int numPorts) {
 
-    List<Port> ports = portRepository.findAll();
-    SortedSet<PortDistancePair> portDistancePairs = new TreeSet<PortDistancePair>();
+    final List<Port> ports = portRepository.findAll();
+    final SortedSet<PortDistancePair> portDistancePairs = new TreeSet<PortDistancePair>();
 
     for (Port port : ports) {
-      portDistancePairs.add(new PortDistancePair(port, mDistanceCalculator
-          .calculate(geoLocation, port.getGeoLocation())));
+      if (port.isGeoCoded()) {
+        final double distance = mDistanceCalculator.calculate(geoLocation,
+            port.getGeoLocation());
+        portDistancePairs.add(new PortDistancePair(port, distance));
+      }
     }
 
-    List<Port> nearestPorts = new ArrayList<Port>(numPorts);
+    List<Port> nearestPorts = new LinkedList<Port>();
     int i = 0;
     for (Iterator<PortDistancePair> iterator = portDistancePairs.iterator(); i < numPorts
         && iterator.hasNext();) {
-      nearestPorts.add(iterator.next().getPort());
+      PortDistancePair portDistancePair = iterator.next();
+      nearestPorts.add(portDistancePair.getPort());
+      ++i;
     }
     return nearestPorts;
   }

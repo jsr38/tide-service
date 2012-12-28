@@ -126,6 +126,9 @@
     <dependent-module archiveName="mail-1.4.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/javax/mail/mail/1.4.1/mail-1.4.1.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
+    <dependent-module archiveName="mockito-all-1.9.5-rc1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/mockito/mockito-all/1.9.5-rc1/mockito-all-1.9.5-rc1.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
     <dependent-module archiveName="postgresql-9.1-901.jdbc3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/postgresql/postgresql/9.1-901.jdbc3/postgresql-9.1-901.jdbc3.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>

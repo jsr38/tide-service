@@ -20,22 +20,27 @@ import nz.co.jsrsolutions.tideservice.core.domain.GeoLocation;
 
 public class HaversineDistanceCalculator implements DistanceCalculator {
 
+  @SuppressWarnings("unused")
   private static final double EARTH_MAJOR_AXIS_RADIUS = 6378137.0; // (m)
 
+  @SuppressWarnings("unused")
   private static final double EARTH_MINOR_AXIS_RADIUS = 6356752.314245; // (m)
 
-  private static final double EARTH_GEOMETRIC_MEAN_RADIUS;
-  
+  private static final double EARTH_AVERAGE_RADIUS = 6372800; // (m)
+
   private static final double PI_OVER_180;
 
   static {
-    EARTH_GEOMETRIC_MEAN_RADIUS = Math.sqrt(Math.pow(EARTH_MAJOR_AXIS_RADIUS,
-        2.0f) + Math.pow(EARTH_MINOR_AXIS_RADIUS, 2.0f));
     PI_OVER_180 = Math.PI / 180.0f;
   }
 
   /**
    * @brief Computes the arc, in radian, between two WGS-84 positions.
+   * 
+   *        -- 6372.8 km is an approximation of the radius of the average
+   *        circumference (i.e., the average great-elliptic or great-circle
+   *        radius), where the boundaries are the meridian (6367.45 km) and the
+   *        equator (6378.14 km).
    * 
    *        The result is equal to
    *        <code>Distance(from,to)/EARTH_RADIUS_IN_METERS</code>
@@ -55,19 +60,30 @@ public class HaversineDistanceCalculator implements DistanceCalculator {
   @Override
   public double calculate(GeoLocation geoLocation1, GeoLocation geoLocation2) {
 
-    final double lat1Radians = geoLocation1.getLatitude() * PI_OVER_180;
-    final double lat2Radians = geoLocation2.getLatitude() * PI_OVER_180;
-    final double lng1Radians = geoLocation1.getLongitude() * PI_OVER_180;
-    final double lng2Radians = geoLocation2.getLongitude() * PI_OVER_180;
-    
-    final double haversinLatDiff = Math.pow(Math.sin((lat2Radians - lat1Radians)/2.0f), 2.0f);
-    final double haversinLngDiff = Math.pow(Math.sin((lng2Radians - lng1Radians)/2.0f), 2.0f);
-    
-    final double sqrtH = Math.sqrt(haversinLatDiff + Math.cos(lat1Radians) * Math.cos(lat2Radians) * haversinLngDiff);
-    
-    final double d = 2.0f * EARTH_GEOMETRIC_MEAN_RADIUS * Math.asin(sqrtH);
-    
-    return d;
+    final double lat1Radians = geoLocation1.getLatitude() * PI_OVER_180 / 1e6; // scaled
+                                                                               // as
+                                                                               // per
+                                                                               // GeoLocation
+                                                                               // storage
+                                                                               // type
+                                                                               // (long
+                                                                               // *
+                                                                               // 1e6)
+    final double lat2Radians = geoLocation2.getLatitude() * PI_OVER_180 / 1e6;
+    final double lng1Radians = geoLocation1.getLongitude() * PI_OVER_180 / 1e6;
+    final double lng2Radians = geoLocation2.getLongitude() * PI_OVER_180 / 1e6;
+
+    final double haversinLatDiff = Math.pow(
+        Math.sin((lat2Radians - lat1Radians) / 2.0f), 2.0f);
+    final double haversinLngDiff = Math.pow(
+        Math.sin((lng2Radians - lng1Radians) / 2.0f), 2.0f);
+
+    final double sqrtH = Math.sqrt(haversinLatDiff + Math.cos(lat1Radians)
+        * Math.cos(lat2Radians) * haversinLngDiff);
+
+    final double d = 2.0f * EARTH_AVERAGE_RADIUS * Math.asin(sqrtH);
+
+    return d / 1e3; // Return the result in km
   }
 
 }

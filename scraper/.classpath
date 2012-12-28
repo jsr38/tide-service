@@ -39,6 +39,7 @@
   <classpathentry kind="var" path="M2_REPO/joda-time/joda-time/2.1/joda-time-2.1.jar" sourcepath="M2_REPO/joda-time/joda-time/2.1/joda-time-2.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.10/junit-4.10.jar" sourcepath="M2_REPO/junit/junit/4.10/junit-4.10-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar" sourcepath="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mockito/mockito-all/1.9.5-rc1/mockito-all-1.9.5-rc1.jar" sourcepath="M2_REPO/org/mockito/mockito-all/1.9.5-rc1/mockito-all-1.9.5-rc1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/springframework/roo/org.springframework.roo.annotations/1.2.2.RELEASE/org.springframework.roo.annotations-1.2.2.RELEASE.jar" sourcepath="M2_REPO/org/springframework/roo/org.springframework.roo.annotations/1.2.2.RELEASE/org.springframework.roo.annotations-1.2.2.RELEASE-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/postgresql/postgresql/9.1-901.jdbc3/postgresql-9.1-901.jdbc3.jar" sourcepath="M2_REPO/postgresql/postgresql/9.1-901.jdbc3/postgresql-9.1-901.jdbc3-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/quartz-scheduler/quartz/2.1.6/quartz-2.1.6.jar" sourcepath="M2_REPO/org/quartz-scheduler/quartz/2.1.6/quartz-2.1.6-sources.jar"/>

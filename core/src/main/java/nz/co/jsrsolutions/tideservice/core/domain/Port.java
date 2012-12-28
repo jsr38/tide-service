@@ -17,7 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity(sequenceName = "PORT_SEQ")
 @RooEquals
-@RooJson(deepSerialize = true)
+@RooJson(deepSerialize = false)
 public class Port extends DomainBase {
 
   @NotNull

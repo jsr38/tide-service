@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @RooWebJson(jsonObject = Port.class)
@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/ports")
 public class PortController {
   
-  @RequestMapping(value = "?lat={lat}&lng={lng}&n={n}", headers = "Accept=application/json")
+  @RequestMapping(value="/search", headers = "Accept=application/json")
   @ResponseBody
-  public ResponseEntity<String> listNearestNJson(@PathVariable("lat") Long lat,
-                                                  @PathVariable("lng") Long lng,
-                                                  @PathVariable("n") Integer n) {
+  public ResponseEntity<String> listNearestNJson(@RequestParam("lat") Long lat,
+                                                  @RequestParam("lng") Long lng,
+                                                  @RequestParam("n") Integer n) {
       GeoLocation geoLocation = new GeoLocation();
       geoLocation.setLatitude(lat);
       geoLocation.setLongitude(lng);

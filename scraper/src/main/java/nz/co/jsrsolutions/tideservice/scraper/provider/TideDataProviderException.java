@@ -3,7 +3,7 @@
 /*
  * @(#)TideDataProviderException.java        
  *
- * Copyright (c) 2012 JSR Solutions Limited
+ * Copyright (c) 2013 JSR Solutions Limited
  * 4 Viridian Lane, Auckland, 0632.  New Zealand
  * All rights reserved.
  *
